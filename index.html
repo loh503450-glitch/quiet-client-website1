@@ -930,6 +930,12 @@
                         </svg>
                         Products
                     </a>
+                    <a class="nav-link" onclick="toggleAdminPanel()" style="color: #ef4444 !important; font-weight: 700 !important;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        ADMIN PANEL
+                    </a>
                 </div>
             </div>
             <div class="nav-right" id="navRight">
@@ -1226,11 +1232,11 @@
             <h2 class="admin-title">Админ Панель</h2>
             <div class="users-table">
                 <div class="table-header">
-                    <div>Пользователь</div>
+                    <div>Username</div>
                     <div>Email</div>
-                    <div>Дата регистрации</div>
-                    <div>Статус</div>
-                    <div>Действия</div>
+                    <div>Registration Date</div>
+                    <div>Subscription Status</div>
+                    <div>Actions</div>
                 </div>
                 <div id="usersTableBody">
                     <!-- Users will be loaded here -->
@@ -1297,6 +1303,16 @@
     <script>
         console.log('JavaScript loaded successfully!');
 
+        // НАСТРОЙКИ SUPABASE - ЗАМЕНИ НА СВОИ ДАННЫЕ
+        const SUPABASE_URL = 'https://your-project.supabase.co';
+        const SUPABASE_ANON_KEY = 'your-anon-key';
+        
+        // Проверяем есть ли Supabase
+        let useSupabase = false;
+        if (SUPABASE_URL !== 'https://your-project.supabase.co' && SUPABASE_ANON_KEY !== 'your-anon-key') {
+            useSupabase = true;
+        }
+
         // АДМИН ПАНЕЛЬ ФУНКЦИИ - СРАЗУ В НАЧАЛЕ
         function toggleAdminPanel() {
             const adminPanel = document.getElementById('adminPanel');
@@ -1314,13 +1330,42 @@
             }
         }
 
-        function loadUsers() {
+        async function loadUsers() {
             const tableBody = document.getElementById('usersTableBody');
             if (!tableBody) return;
             
-            tableBody.innerHTML = '';
+            tableBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #9ca3af;">Loading users...</div>';
             
-            let users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+            let users = [];
+            
+            if (useSupabase) {
+                // Загружаем из Supabase
+                try {
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/users?select=*`, {
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        users = await response.json();
+                        console.log('Loaded users from Supabase:', users.length);
+                    } else {
+                        console.error('Failed to load users from Supabase');
+                        users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+                    }
+                } catch (error) {
+                    console.error('Supabase error:', error);
+                    users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+                }
+            } else {
+                // Используем localStorage
+                users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+            }
+            
+            tableBody.innerHTML = '';
             const regularUsers = users.filter(u => u.role !== 'admin');
             
             if (regularUsers.length === 0) {
@@ -1334,18 +1379,42 @@
             regularUsers.forEach(user => {
                 const row = document.createElement('div');
                 row.className = 'table-row';
+                
+                // Проверяем срок подписки
+                let subscriptionStatus = 'Inactive';
+                let subscriptionColor = 'status-inactive';
+                
+                if (user.subscription_end) {
+                    const endDate = new Date(user.subscription_end);
+                    const now = new Date();
+                    
+                    if (endDate > now) {
+                        subscriptionStatus = `Active until ${endDate.toLocaleDateString()}`;
+                        subscriptionColor = 'status-active';
+                    } else {
+                        subscriptionStatus = `Expired ${endDate.toLocaleDateString()}`;
+                        subscriptionColor = 'status-inactive';
+                    }
+                } else if (user.subscription === 'active') {
+                    subscriptionStatus = 'Active (Legacy)';
+                    subscriptionColor = 'status-active';
+                }
+                
                 row.innerHTML = `
                     <div>${user.username}</div>
                     <div>${user.email}</div>
-                    <div>${new Date(user.registrationDate).toLocaleDateString()}</div>
-                    <div class="${user.subscription === 'active' ? 'status-active' : 'status-inactive'}">
-                        ${user.subscription === 'active' ? 'Active' : 'Inactive'}
+                    <div>${new Date(user.registrationDate || user.created_at).toLocaleDateString()}</div>
+                    <div class="${subscriptionColor}">
+                        ${subscriptionStatus}
                     </div>
-                    <div>
-                        <button class="btn-small" onclick="toggleUserSubscription(${user.id})" 
-                                style="background: ${user.subscription === 'active' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)'}; 
-                                       border-color: ${user.subscription === 'active' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(16, 185, 129, 0.4)'};">
-                            ${user.subscription === 'active' ? 'Deactivate' : 'Activate'}
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <button class="btn-small" onclick="showSubscriptionModal(${user.id})" 
+                                style="background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4);">
+                            Set Subscription
+                        </button>
+                        <button class="btn-small" onclick="removeSubscription(${user.id})" 
+                                style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);">
+                            Remove
                         </button>
                     </div>
                 `;
@@ -1355,39 +1424,175 @@
             console.log(`Loaded ${regularUsers.length} users in admin panel`);
         }
 
-        function toggleUserSubscription(userId) {
-            let users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
-            const user = users.find(u => u.id === userId);
-            if (user) {
-                user.subscription = user.subscription === 'active' ? 'inactive' : 'active';
-                localStorage.setItem('quietUsers', JSON.stringify(users));
-                loadUsers();
-                updateUserCount();
-                console.log(`User ${user.username} subscription toggled to ${user.subscription}`);
-                
-                // Show notification
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 20px;
-                    right: 20px;
-                    background: rgba(16, 185, 129, 0.9);
-                    color: white;
-                    padding: 12px 20px;
-                    border-radius: 8px;
-                    z-index: 3000;
-                    backdrop-filter: blur(10px);
-                `;
-                notification.textContent = `${user.username} subscription ${user.subscription}`;
-                document.body.appendChild(notification);
-                
-                setTimeout(() => {
-                    notification.remove();
-                }, 3000);
-            }
+        function showSubscriptionModal(userId) {
+            const modal = document.createElement('div');
+            modal.className = 'modal show';
+            modal.innerHTML = `
+                <div class="modal-content">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                    <h2 class="modal-title">Set Subscription</h2>
+                    <div style="padding: 20px;">
+                        <div class="form-group">
+                            <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Subscription Type:</label>
+                            <select id="subscriptionType" class="form-input">
+                                <option value="1">1 Day</option>
+                                <option value="7">1 Week</option>
+                                <option value="30">1 Month</option>
+                                <option value="90">3 Months</option>
+                                <option value="365">1 Year</option>
+                                <option value="lifetime">Lifetime</option>
+                                <option value="custom">Custom Days</option>
+                            </select>
+                        </div>
+                        <div class="form-group" id="customDaysGroup" style="display: none;">
+                            <label style="color: rgba(255, 255, 255, 0.8); margin-bottom: 8px; display: block;">Custom Days:</label>
+                            <input type="number" id="customDays" class="form-input" placeholder="Enter number of days" min="1">
+                        </div>
+                        <button onclick="setUserSubscription(${userId})" class="btn-modal">Set Subscription</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+            
+            // Show/hide custom days input
+            document.getElementById('subscriptionType').addEventListener('change', function() {
+                const customGroup = document.getElementById('customDaysGroup');
+                if (this.value === 'custom') {
+                    customGroup.style.display = 'block';
+                } else {
+                    customGroup.style.display = 'none';
+                }
+            });
         }
 
-        // Database simulation using localStorage
+        async function setUserSubscription(userId) {
+            const subscriptionType = document.getElementById('subscriptionType').value;
+            const customDays = document.getElementById('customDays').value;
+            
+            let days = 0;
+            let isLifetime = false;
+            
+            if (subscriptionType === 'lifetime') {
+                isLifetime = true;
+            } else if (subscriptionType === 'custom') {
+                days = parseInt(customDays);
+                if (!days || days < 1) {
+                    alert('Please enter valid number of days');
+                    return;
+                }
+            } else {
+                days = parseInt(subscriptionType);
+            }
+            
+            const endDate = isLifetime ? new Date('2099-12-31') : new Date(Date.now() + days * 24 * 60 * 60 * 1000);
+            
+            if (useSupabase) {
+                // Обновляем в Supabase
+                try {
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            subscription: 'active',
+                            subscription_end: endDate.toISOString()
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        console.log('Subscription updated in Supabase');
+                    } else {
+                        console.error('Failed to update subscription in Supabase');
+                    }
+                } catch (error) {
+                    console.error('Supabase error:', error);
+                }
+            } else {
+                // Обновляем в localStorage
+                let users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+                const user = users.find(u => u.id === userId);
+                if (user) {
+                    user.subscription = 'active';
+                    user.subscription_end = endDate.toISOString();
+                    localStorage.setItem('quietUsers', JSON.stringify(users));
+                }
+            }
+            
+            // Закрываем модал и обновляем список
+            document.querySelector('.modal.show').remove();
+            loadUsers();
+            
+            // Показываем уведомление
+            showNotification(`Subscription set for ${isLifetime ? 'lifetime' : days + ' days'}`, 'success');
+        }
+
+        async function removeSubscription(userId) {
+            if (!confirm('Are you sure you want to remove this user\'s subscription?')) {
+                return;
+            }
+            
+            if (useSupabase) {
+                // Обновляем в Supabase
+                try {
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/users?id=eq.${userId}`, {
+                        method: 'PATCH',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            subscription: 'inactive',
+                            subscription_end: null
+                        })
+                    });
+                    
+                    if (response.ok) {
+                        console.log('Subscription removed in Supabase');
+                    }
+                } catch (error) {
+                    console.error('Supabase error:', error);
+                }
+            } else {
+                // Обновляем в localStorage
+                let users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+                const user = users.find(u => u.id === userId);
+                if (user) {
+                    user.subscription = 'inactive';
+                    user.subscription_end = null;
+                    localStorage.setItem('quietUsers', JSON.stringify(users));
+                }
+            }
+            
+            loadUsers();
+            showNotification('Subscription removed', 'success');
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? 'rgba(16, 185, 129, 0.9)' : 'rgba(239, 68, 68, 0.9)'};
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                z-index: 3000;
+                backdrop-filter: blur(10px);
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // Database simulation using localStorage (fallback)
         let users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
         let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
 
@@ -1478,13 +1683,6 @@
                 return;
             }
 
-            // Check if user already exists
-            const existingUser = users.find(user => user.email === email || user.username === username);
-            if (existingUser) {
-                showError('registerModal', 'User with this email or username already exists!');
-                return;
-            }
-
             // Create new user
             const newUser = {
                 id: Date.now(),
@@ -1492,14 +1690,52 @@
                 email: email,
                 password: password,
                 registrationDate: new Date().toISOString(),
+                created_at: new Date().toISOString(),
                 subscription: 'inactive',
+                subscription_end: null,
                 role: 'user'
             };
 
-            users.push(newUser);
-            localStorage.setItem('quietUsers', JSON.stringify(users));
-            updateUserCount();
+            if (useSupabase) {
+                // Сохраняем в Supabase
+                try {
+                    const response = await fetch(`${SUPABASE_URL}/rest/v1/users`, {
+                        method: 'POST',
+                        headers: {
+                            'apikey': SUPABASE_ANON_KEY,
+                            'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newUser)
+                    });
+                    
+                    if (response.ok) {
+                        console.log('User saved to Supabase');
+                    } else {
+                        console.error('Failed to save user to Supabase');
+                        // Fallback to localStorage
+                        users.push(newUser);
+                        localStorage.setItem('quietUsers', JSON.stringify(users));
+                    }
+                } catch (error) {
+                    console.error('Supabase error:', error);
+                    // Fallback to localStorage
+                    users.push(newUser);
+                    localStorage.setItem('quietUsers', JSON.stringify(users));
+                }
+            } else {
+                // Проверяем существующих пользователей в localStorage
+                const existingUser = users.find(user => user.email === email || user.username === username);
+                if (existingUser) {
+                    showError('registerModal', 'User with this email or username already exists!');
+                    return;
+                }
+                
+                users.push(newUser);
+                localStorage.setItem('quietUsers', JSON.stringify(users));
+            }
 
+            updateUserCount();
             showSuccess('registerModal', 'Registration successful! Please log in.');
             
             setTimeout(() => {
