@@ -1303,9 +1303,12 @@
     <script>
         console.log('JavaScript loaded successfully!');
 
-        // ОБЩАЯ БАЗА ДАННЫХ НА GITHUB
-        const DATABASE_URL = 'https://api.github.com/repos/loh503450-glitch/quiet-client-sitek/contents/users.json';
-        const GITHUB_TOKEN = 'your_github_token'; // Замени на свой токен
+        // ОБЩАЯ БАЗА ДАННЫХ - JSONBin (бесплатно)
+        const JSONBIN_API_KEY = '$2a$10$your-api-key-here'; // Замени на свой ключ
+        const JSONBIN_BIN_ID = 'your-bin-id-here'; // Замени на свой bin ID
+        
+        // Проверяем настроена ли база данных
+        const isDatabaseConfigured = JSONBIN_API_KEY !== '$2a$10$your-api-key-here' && JSONBIN_BIN_ID !== 'your-bin-id-here';
         
         // АДМИН ПАНЕЛЬ ФУНКЦИИ
         function toggleAdminPanel() {
@@ -1328,84 +1331,145 @@
             const tableBody = document.getElementById('usersTableBody');
             if (!tableBody) return;
             
-            tableBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #9ca3af;">Loading all users...</div>';
+            tableBody.innerHTML = '<div style="padding: 20px; text-align: center; color: #9ca3af;">Loading all users from database...</div>';
             
             let users = [];
             
-            try {
-                // Загружаем ОБЩУЮ базу данных с GitHub
-                const response = await fetch('https://raw.githubusercontent.com/loh503450-glitch/quiet-client-sitek/main/users.json');
-                
-                if (response.ok) {
-                    const data = await response.text();
-                    users = JSON.parse(data || '[]');
-                    console.log('Loaded users from GitHub database:', users.length);
-                } else {
-                    console.log('GitHub database not found, using localStorage');
+            if (isDatabaseConfigured) {
+                try {
+                    // Загружаем из JSONBin (общая база данных)
+                    const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                        headers: {
+                            'X-Master-Key': JSONBIN_API_KEY
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        users = data.record || [];
+                        console.log('✅ Loaded users from JSONBin database:', users.length);
+                        
+                        // Показываем уведомление о загрузке из общей базы
+                        showNotification(`Loaded ${users.length} users from global database`, 'success');
+                    } else {
+                        console.log('❌ Failed to load from JSONBin, using localStorage');
+                        users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+                    }
+                } catch (error) {
+                    console.log('❌ JSONBin error, using localStorage:', error);
                     users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
                 }
-            } catch (error) {
-                console.log('Error loading GitHub database, using localStorage:', error);
+            } else {
+                // База данных не настроена, используем localStorage
                 users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+                console.log('⚠️ Database not configured, using localStorage only');
+                
+                // Показываем предупреждение
+                tableBody.innerHTML = `
+                    <div style="padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.8); background: rgba(239, 68, 68, 0.1); border-radius: 8px; margin: 20px;">
+                        <h3 style="color: #ef4444; margin-bottom: 16px;">⚠️ Database Not Configured</h3>
+                        <p style="margin-bottom: 16px;">Currently showing only local users. To see ALL users from all devices:</p>
+                        <ol style="text-align: left; max-width: 400px; margin: 0 auto;">
+                            <li>Go to <a href="https://jsonbin.io" target="_blank" style="color: #6366f1;">jsonbin.io</a></li>
+                            <li>Create free account</li>
+                            <li>Create a new bin</li>
+                            <li>Copy API key and Bin ID</li>
+                            <li>Replace in code</li>
+                        </ol>
+                    </div>
+                `;
             }
             
-            tableBody.innerHTML = '';
-            const regularUsers = users.filter(u => u.role !== 'admin');
-            
-            if (regularUsers.length === 0) {
-                const emptyRow = document.createElement('div');
-                emptyRow.style.cssText = 'padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.6);';
-                emptyRow.textContent = 'No users registered yet. Users will appear here after registration.';
-                tableBody.appendChild(emptyRow);
+            if (isDatabaseConfigured) {
+                tableBody.innerHTML = '';
+                const regularUsers = users.filter(u => u.role !== 'admin');
+                
+                if (regularUsers.length === 0) {
+                    const emptyRow = document.createElement('div');
+                    emptyRow.style.cssText = 'padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.6);';
+                    emptyRow.textContent = 'No users registered yet. Users will appear here after registration.';
+                    tableBody.appendChild(emptyRow);
+                    return;
+                }
+                
+                regularUsers.forEach(user => {
+                    const row = document.createElement('div');
+                    row.className = 'table-row';
+                    
+                    // Проверяем срок подписки
+                    let subscriptionStatus = 'Inactive';
+                    let subscriptionColor = 'status-inactive';
+                    
+                    if (user.subscription_end) {
+                        const endDate = new Date(user.subscription_end);
+                        const now = new Date();
+                        
+                        if (endDate > now) {
+                            subscriptionStatus = `Active until ${endDate.toLocaleDateString()}`;
+                            subscriptionColor = 'status-active';
+                        } else {
+                            subscriptionStatus = `Expired ${endDate.toLocaleDateString()}`;
+                            subscriptionColor = 'status-inactive';
+                        }
+                    } else if (user.subscription === 'active') {
+                        subscriptionStatus = 'Active (Legacy)';
+                        subscriptionColor = 'status-active';
+                    }
+                    
+                    row.innerHTML = `
+                        <div>${user.username}</div>
+                        <div>${user.email}</div>
+                        <div>${new Date(user.registrationDate || user.created_at).toLocaleDateString()}</div>
+                        <div class="${subscriptionColor}">
+                            ${subscriptionStatus}
+                        </div>
+                        <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                            <button class="btn-small" onclick="showSubscriptionModal('${user.username}')" 
+                                    style="background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4);">
+                                Set Subscription
+                            </button>
+                            <button class="btn-small" onclick="removeSubscription('${user.username}')" 
+                                    style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);">
+                                Remove
+                            </button>
+                        </div>
+                    `;
+                    tableBody.appendChild(row);
+                });
+                
+                console.log(`✅ Loaded ${regularUsers.length} users in admin panel`);
+            }
+        }
+
+        async function saveUsersToDatabase(users) {
+            if (!isDatabaseConfigured) {
+                // Сохраняем только в localStorage
+                localStorage.setItem('quietUsers', JSON.stringify(users));
                 return;
             }
             
-            regularUsers.forEach(user => {
-                const row = document.createElement('div');
-                row.className = 'table-row';
+            try {
+                // Сохраняем в JSONBin (общая база данных)
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify(users)
+                });
                 
-                // Проверяем срок подписки
-                let subscriptionStatus = 'Inactive';
-                let subscriptionColor = 'status-inactive';
-                
-                if (user.subscription_end) {
-                    const endDate = new Date(user.subscription_end);
-                    const now = new Date();
-                    
-                    if (endDate > now) {
-                        subscriptionStatus = `Active until ${endDate.toLocaleDateString()}`;
-                        subscriptionColor = 'status-active';
-                    } else {
-                        subscriptionStatus = `Expired ${endDate.toLocaleDateString()}`;
-                        subscriptionColor = 'status-inactive';
-                    }
-                } else if (user.subscription === 'active') {
-                    subscriptionStatus = 'Active (Legacy)';
-                    subscriptionColor = 'status-active';
+                if (response.ok) {
+                    console.log('✅ Users saved to JSONBin database');
+                } else {
+                    console.log('❌ Failed to save to JSONBin');
                 }
-                
-                row.innerHTML = `
-                    <div>${user.username}</div>
-                    <div>${user.email}</div>
-                    <div>${new Date(user.registrationDate || user.created_at).toLocaleDateString()}</div>
-                    <div class="${subscriptionColor}">
-                        ${subscriptionStatus}
-                    </div>
-                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <button class="btn-small" onclick="showSubscriptionModal('${user.username}')" 
-                                style="background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4);">
-                            Set Subscription
-                        </button>
-                        <button class="btn-small" onclick="removeSubscription('${user.username}')" 
-                                style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);">
-                            Remove
-                        </button>
-                    </div>
-                `;
-                tableBody.appendChild(row);
-            });
+            } catch (error) {
+                console.log('❌ JSONBin save error:', error);
+            }
             
-            console.log(`Loaded ${regularUsers.length} users in admin panel`);
+            // Всегда сохраняем в localStorage как резерв
+            localStorage.setItem('quietUsers', JSON.stringify(users));
         }
 
         function showSubscriptionModal(username) {
@@ -1472,12 +1536,21 @@
             
             try {
                 // Загружаем текущую базу данных
-                const response = await fetch('https://raw.githubusercontent.com/loh503450-glitch/quiet-client-sitek/main/users.json');
                 let users = [];
                 
-                if (response.ok) {
-                    const data = await response.text();
-                    users = JSON.parse(data || '[]');
+                if (isDatabaseConfigured) {
+                    const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                        headers: {
+                            'X-Master-Key': JSONBIN_API_KEY
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        users = data.record || [];
+                    }
+                } else {
+                    users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
                 }
                 
                 // Находим и обновляем пользователя
@@ -1487,12 +1560,12 @@
                     user.subscription_end = endDate.toISOString();
                 }
                 
-                // Сохраняем в localStorage как резерв
-                localStorage.setItem('quietUsers', JSON.stringify(users));
+                // Сохраняем обновленную базу данных
+                await saveUsersToDatabase(users);
                 
-                console.log('Subscription updated for:', username);
+                console.log('✅ Subscription updated for:', username);
             } catch (error) {
-                console.error('Error updating subscription:', error);
+                console.error('❌ Error updating subscription:', error);
             }
             
             // Закрываем модал и обновляем список
@@ -1510,12 +1583,21 @@
             
             try {
                 // Загружаем текущую базу данных
-                const response = await fetch('https://raw.githubusercontent.com/loh503450-glitch/quiet-client-sitek/main/users.json');
                 let users = [];
                 
-                if (response.ok) {
-                    const data = await response.text();
-                    users = JSON.parse(data || '[]');
+                if (isDatabaseConfigured) {
+                    const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                        headers: {
+                            'X-Master-Key': JSONBIN_API_KEY
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        users = data.record || [];
+                    }
+                } else {
+                    users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
                 }
                 
                 // Находим и обновляем пользователя
@@ -1525,12 +1607,12 @@
                     user.subscription_end = null;
                 }
                 
-                // Сохраняем в localStorage как резерв
-                localStorage.setItem('quietUsers', JSON.stringify(users));
+                // Сохраняем обновленную базу данных
+                await saveUsersToDatabase(users);
                 
-                console.log('Subscription removed for:', username);
+                console.log('✅ Subscription removed for:', username);
             } catch (error) {
-                console.error('Error removing subscription:', error);
+                console.error('❌ Error removing subscription:', error);
             }
             
             loadUsers();
@@ -1665,14 +1747,25 @@
             try {
                 // Загружаем текущую общую базу данных
                 let users = [];
-                try {
-                    const response = await fetch('https://raw.githubusercontent.com/loh503450-glitch/quiet-client-sitek/main/users.json');
-                    if (response.ok) {
-                        const data = await response.text();
-                        users = JSON.parse(data || '[]');
+                
+                if (isDatabaseConfigured) {
+                    try {
+                        const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                            headers: {
+                                'X-Master-Key': JSONBIN_API_KEY
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            const data = await response.json();
+                            users = data.record || [];
+                            console.log('✅ Loaded existing users from JSONBin:', users.length);
+                        }
+                    } catch (error) {
+                        console.log('❌ Could not load JSONBin database:', error);
+                        users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
                     }
-                } catch (error) {
-                    console.log('Could not load GitHub database, using localStorage');
+                } else {
                     users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
                 }
 
@@ -1686,16 +1779,14 @@
                 // Добавляем нового пользователя
                 users.push(newUser);
                 
-                // Сохраняем в localStorage (всегда работает)
-                localStorage.setItem('quietUsers', JSON.stringify(users));
+                // Сохраняем в общую базу данных
+                await saveUsersToDatabase(users);
                 
-                // Отправляем уведомление о новом пользователе (для синхронизации)
-                console.log('New user registered:', newUser.username);
-                
-                // Можно добавить webhook или другой способ синхронизации
+                console.log('✅ New user registered:', newUser.username);
+                showNotification(`User ${newUser.username} registered successfully!`, 'success');
                 
             } catch (error) {
-                console.error('Registration error:', error);
+                console.error('❌ Registration error:', error);
                 // Fallback - сохраняем только в localStorage
                 let localUsers = JSON.parse(localStorage.getItem('quietUsers') || '[]');
                 const existingUser = localUsers.find(user => user.email === email || user.username === username);
