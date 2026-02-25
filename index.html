@@ -1,0 +1,1681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiet Client</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0a0a0a;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        /* Background blur effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 30%, rgba(100, 100, 255, 0.15) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 10, 10, 0.8);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .logo-icon {
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: #9ca3af;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .nav-link:hover {
+            color: #ffffff;
+        }
+
+        .nav-link.active {
+            color: #ffffff;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .language-selector {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #9ca3af;
+            font-size: 14px;
+        }
+        .btn-login {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .btn-login:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        .btn-register {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-register:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        .btn-account {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-account:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        .nav-right.logged-in {
+            justify-content: flex-end;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            padding: 120px 40px 80px;
+            scroll-snap-align: start;
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 40px;
+            box-shadow: 0 20px 60px rgba(99, 102, 241, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .hero-logo svg {
+            width: 60px;
+            height: 60px;
+            color: white;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 600;
+            line-height: 1.2;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: #9ca3af;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+        .hero-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .btn-primary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.08);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.25);
+            transform: translateY(-1px);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        /* Stats Section */
+        .stats-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 40px;
+            position: relative;
+            z-index: 2;
+            scroll-snap-align: start;
+        }
+
+        .stats-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 32px;
+        }
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-4px);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        .stat-number {
+            font-size: 36px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #9ca3af;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 40px;
+            position: relative;
+            z-index: 2;
+            scroll-snap-align: start;
+        }
+
+        .faq-item {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .faq-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+        }
+
+        .faq-question {
+            padding: 24px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        .faq-answer {
+            padding: 0 24px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+            display: none;
+        }
+
+        .faq-answer.show {
+            display: block;
+        }
+
+        .faq-icon-toggle {
+            transition: transform 0.3s ease;
+        }
+
+        /* Pricing Section */
+        .pricing-section {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 40px;
+            position: relative;
+            z-index: 2;
+            scroll-snap-align: start;
+        }
+
+        .pricing-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .pricing-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .pricing-subtitle {
+            font-size: 16px;
+            color: #9ca3af;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        .pricing-cards {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            gap: 32px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+        }
+
+        .pricing-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px 32px;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            position: relative;
+            overflow: hidden;
+            flex: 1;
+            min-width: 280px;
+            max-width: 320px;
+        }
+
+        .pricing-card:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-8px);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        .pricing-card.popular {
+            border-color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .pricing-card.popular::before {
+            content: 'ПОПУЛЯРНЫЙ';
+            position: absolute;
+            top: 20px;
+            right: -30px;
+            background: #6366f1;
+            color: white;
+            padding: 4px 40px;
+            font-size: 12px;
+            font-weight: 600;
+            transform: rotate(45deg);
+        }
+
+        .pricing-plan {
+            font-size: 24px;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 16px;
+        }
+
+        .pricing-price {
+            font-size: 48px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 8px;
+        }
+
+        .pricing-currency {
+            font-size: 18px;
+            color: #9ca3af;
+            margin-bottom: 32px;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin-bottom: 32px;
+        }
+
+        .pricing-feature {
+            padding: 8px 0;
+            color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .pricing-btn {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 16px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .pricing-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        .pricing-card.popular .pricing-btn {
+            background: rgba(99, 102, 241, 0.2);
+            color: white;
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .pricing-card.popular .pricing-btn:hover {
+            background: rgba(99, 102, 241, 0.3);
+            border-color: rgba(99, 102, 241, 0.6);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .faq-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: #9ca3af;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .faq-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .faq-subtitle {
+            font-size: 16px;
+            color: #9ca3af;
+            line-height: 1.6;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(50px);
+            -webkit-backdrop-filter: blur(50px);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 48px 40px;
+            width: 90%;
+            max-width: 420px;
+            position: relative;
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 24px;
+            color: #9ca3af;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            background: none;
+            border: none;
+        }
+
+        .modal-close:hover {
+            color: #ffffff;
+        }
+        .modal-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 18px 20px;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 400;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .form-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+            font-weight: 400;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+
+        .btn-modal {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 16px;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+        }
+
+        .btn-modal:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(35px);
+            -webkit-backdrop-filter: blur(35px);
+        }
+        .modal-footer {
+            text-align: center;
+            margin-top: 32px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+        }
+
+        .modal-link {
+            color: #ffffff;
+            text-decoration: underline;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            font-weight: 500;
+        }
+
+        .modal-link:hover {
+            color: #e0e7ff;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 20px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 36px;
+            }
+            
+            .hero-section {
+                padding: 100px 20px 60px;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 20px;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .modal-content {
+                padding: 32px 24px;
+                margin: 20px;
+            }
+
+            .pricing-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .pricing-card {
+                max-width: 100%;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-left">
+                <div class="logo">
+                    <div class="logo-icon">Q</div>
+                    Quiet
+                </div>
+                
+                <div class="nav-links">
+                    <a href="#" class="nav-link active" onclick="navigateToHome()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                            <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        Home
+                    </a>
+                    <a href="#" class="nav-link" onclick="navigateToAdvantages()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+                        </svg>
+                        Advantages
+                    </a>
+                    <a href="#" class="nav-link" onclick="navigateToVideo()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="5,3 19,12 5,21 5,3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        Video
+                    </a>
+                    <a href="#" class="nav-link" onclick="navigateToFaq()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Faq
+                    </a>
+                    <a href="#" class="nav-link" onclick="navigateToProducts()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Products
+                    </a>
+                </div>
+            </div>
+            <div class="nav-right">
+                <span class="btn-register" onclick="openRegisterModal();">Register</span>
+                <button class="btn-login" onclick="openLoginModal();">
+                    Login
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <main class="hero-section">
+        <div class="hero-logo">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+            </svg>
+        </div>
+        
+        <h1 class="hero-title">Welcome to Quiet</h1>
+        <p class="hero-subtitle">Maximum power, minimum effort — Quiet, your way to victory.</p>
+        
+        <div class="hero-buttons">
+            <button class="btn-primary" onclick="showProductsFromHero()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Products
+            </button>
+            <button class="btn-secondary" onclick="showAdvantagesFromHero()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+                </svg>
+                Advantages
+            </button>
+        </div>
+    </main>
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Users
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polygon points="5,3 19,12 5,21 5,3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    Launches
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M2 3H8C9.06087 3 10.0783 3.42143 10.8284 4.17157C11.5786 4.92172 12 5.93913 12 7V21C12 20.2044 11.6839 19.4413 11.1213 18.8787C10.5587 18.3161 9.79565 18 9 18H2V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        <path d="M22 3H16C14.9391 3 13.9217 3.42143 13.1716 4.17157C12.4214 4.92172 12 5.93913 12 7V21C12 20.2044 12.3161 19.4413 12.8787 18.8787C13.4413 18.3161 14.2044 18 15 18H22V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                    </svg>
+                    Online
+                </div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">0</div>
+                <div class="stat-label">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Updates
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FAQ Section -->
+    <section class="faq-section">
+        <div class="faq-container">
+            <div class="faq-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                    <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h2 class="faq-title">Frequently Asked Questions</h2>
+            <p class="faq-subtitle" style="margin-bottom: 40px;">Everything you need to know about Quiet Client</p>
+            
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    What is Quiet Client?
+                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    Quiet Client is an advanced gaming client designed to provide maximum performance and minimum effort. It offers premium features, enhanced gameplay mechanics, and a superior user experience for competitive gaming.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Is Quiet Client safe to use?
+                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    Yes, Quiet Client is completely safe. We use advanced security measures and regular updates to ensure your account and data remain protected. Our client is trusted by thousands of users worldwide.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    How much does Quiet Client cost?
+                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    We offer flexible pricing plans starting from €9.99/month for basic features, €19.99/month for Pro version, and €39.99/month for Enterprise. All plans include regular updates and customer support.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    What games does Quiet support?
+                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    Quiet Client supports a wide range of popular games including Minecraft, Fortnite, Valorant, CS:GO, and many others. We continuously add support for new games based on community requests.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    How do I get started with Quiet?
+                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    Getting started is easy! Simply register for an account, choose your preferred plan, download the client, and follow our setup guide. Our support team is available 24/7 to help you with any questions.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Do you offer customer support?
+                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="faq-answer">
+                    Yes! We provide 24/7 customer support through Discord, email, and live chat. Our experienced team is always ready to help you with technical issues, setup questions, or any other concerns.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section class="pricing-section">
+        <div class="pricing-container">
+            <div class="faq-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+                </svg>
+            </div>
+            <h2 class="pricing-title">Choose Your Plan</h2>
+            <p class="pricing-subtitle">Select the perfect plan for your gaming needs</p>
+            
+            <div class="pricing-cards">
+                <div class="pricing-card">
+                    <div class="pricing-plan">Месяц</div>
+                    <div class="pricing-price">250</div>
+                    <div class="pricing-currency">рублей</div>
+                    <ul class="pricing-features">
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Все базовые функции
+                        </li>
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Поддержка 24/7
+                        </li>
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Регулярные обновления
+                        </li>
+                    </ul>
+                    <button class="pricing-btn" onclick="selectPlan('month')">Выбрать план</button>
+                </div>
+
+                <div class="pricing-card popular">
+                    <div class="pricing-plan">Год</div>
+                    <div class="pricing-price">450</div>
+                    <div class="pricing-currency">рублей</div>
+                    <ul class="pricing-features">
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Все функции месячного
+                        </li>
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Приоритетная поддержка
+                        </li>
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Эксклюзивные функции
+                        </li>
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Скидка 85%
+                        </li>
+                    </ul>
+                    <button class="pricing-btn" onclick="selectPlan('year')">Выбрать план</button>
+                </div>
+
+                <div class="pricing-card">
+                    <div class="pricing-plan">ЛайфТайм</div>
+                    <div class="pricing-price">550</div>
+                    <div class="pricing-currency">рублей</div>
+                    <ul class="pricing-features">
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Навсегда ваш
+                        </li>
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Все будущие обновления
+                        </li>
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            VIP поддержка
+                        </li>
+                        <li class="pricing-feature">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                            </svg>
+                            Эксклюзивный доступ
+                        </li>
+                    </ul>
+                    <button class="pricing-btn" onclick="selectPlan('lifetime')">Выбрать план</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('loginModal')">&times;</button>
+            <h2 class="modal-title">Welcome Back</h2>
+            
+            <form onsubmit="handleLogin(event)">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Username" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Password" required>
+                </div>
+                
+                <button type="submit" class="btn-modal">Log In</button>
+            </form>
+            
+            <div class="modal-footer">
+                Don't have an account? <span class="modal-link" onclick="switchToRegister()">Register</span>
+            </div>
+        </div>
+    </div>
+    <!-- Register Modal -->
+    <div class="modal" id="registerModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal('registerModal')">&times;</button>
+            <h2 class="modal-title">Create Account</h2>
+            
+            <form onsubmit="handleRegister(event)">
+                <div class="form-group">
+                    <input type="text" class="form-input" placeholder="Username" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Password" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="password" class="form-input" placeholder="Confirm Password" required>
+                </div>
+                
+                <button type="submit" class="btn-modal">Register</button>
+            </form>
+            
+            <div class="modal-footer">
+                Already have an account? <span class="modal-link" onclick="switchToLogin()">Log In</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Modal functions
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.add('show');
+        }
+
+        function openRegisterModal() {
+            document.getElementById('registerModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function switchToRegister() {
+            closeModal('loginModal');
+            openRegisterModal();
+        }
+
+        function switchToLogin() {
+            closeModal('registerModal');
+            openLoginModal();
+        }
+        function handleLogin(event) {
+            event.preventDefault();
+            const username = event.target.querySelector('input[type="text"]').value;
+            const password = event.target.querySelector('input[type="password"]').value;
+            
+            console.log('Login attempt:', { username, password });
+            
+            // Check if user is registered
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+            
+            if (registeredUsers[username] && registeredUsers[username] === password) {
+                // Successful login
+                loginUser(username);
+                closeModal('loginModal');
+            } else {
+                // Failed login
+                showLoginError('Invalid username or password!');
+            }
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const inputs = event.target.querySelectorAll('input');
+            const username = inputs[0].value;
+            const password = inputs[1].value;
+            const confirmPassword = inputs[2].value;
+            
+            if (password !== confirmPassword) {
+                showRegisterError('Passwords do not match!');
+                return;
+            }
+            
+            if (username.length < 3) {
+                showRegisterError('Username must be at least 3 characters!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                showRegisterError('Password must be at least 6 characters!');
+                return;
+            }
+            
+            console.log('Register attempt:', { username, password });
+            
+            // Check if user already exists
+            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
+            
+            if (registeredUsers[username]) {
+                showRegisterError('Username already exists!');
+                return;
+            }
+            
+            // Save user to registered users
+            registeredUsers[username] = password;
+            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
+            
+            // Simply redirect to login
+            closeModal('registerModal');
+            setTimeout(() => {
+                openLoginModal();
+            }, 300);
+        }
+
+        // Remove the showRegistrationSuccess and redirectToLogin functions
+        // Function to show login error
+        function showLoginError(message) {
+            const existingError = document.querySelector('.login-error');
+            if (existingError) existingError.remove();
+            
+            const loginModal = document.querySelector('#loginModal');
+            const form = loginModal.querySelector('form');
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'login-error';
+            errorDiv.style.cssText = `
+                background: rgba(239, 68, 68, 0.2);
+                border: 1px solid rgba(239, 68, 68, 0.4);
+                border-radius: 8px;
+                padding: 12px;
+                margin-bottom: 16px;
+                color: #ffffff;
+                font-size: 14px;
+                text-align: center;
+                backdrop-filter: blur(20px);
+            `;
+            errorDiv.textContent = message;
+            
+            form.insertBefore(errorDiv, form.firstChild);
+            
+            // Remove error after 5 seconds
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Function to show register error
+        function showRegisterError(message) {
+            const existingError = document.querySelector('.register-error');
+            if (existingError) existingError.remove();
+            
+            const registerModal = document.querySelector('#registerModal');
+            const form = registerModal.querySelector('form');
+            
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'register-error';
+            errorDiv.style.cssText = `
+                background: rgba(239, 68, 68, 0.2);
+                border: 1px solid rgba(239, 68, 68, 0.4);
+                border-radius: 8px;
+                padding: 12px;
+                margin-bottom: 16px;
+                color: #ffffff;
+                font-size: 14px;
+                text-align: center;
+                backdrop-filter: blur(20px);
+            `;
+            errorDiv.textContent = message;
+            
+            form.insertBefore(errorDiv, form.firstChild);
+            
+            // Remove error after 5 seconds
+            setTimeout(() => {
+                if (errorDiv.parentNode) {
+                    errorDiv.remove();
+                }
+            }, 5000);
+        }
+
+        // Function to handle user login state
+        function loginUser(username) {
+            // Store user data
+            localStorage.setItem('isLoggedIn', 'true');
+            localStorage.setItem('username', username);
+            localStorage.setItem('loginDate', new Date().toLocaleDateString());
+            
+            // Update navigation
+            updateNavigation();
+        }
+
+        // Function to update navigation after login
+        function updateNavigation() {
+            const navRight = document.querySelector('.nav-right');
+            const username = localStorage.getItem('username') || 'User';
+            
+            navRight.innerHTML = `
+                <button class="btn-account" onclick="showAccountModal();">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    Account
+                </button>
+            `;
+            navRight.classList.add('logged-in');
+        }
+
+        // Function to show account modal
+        function showAccountModal() {
+            const username = localStorage.getItem('username') || 'User';
+            const loginDate = localStorage.getItem('loginDate') || 'Unknown';
+            
+            // Set UID as numbers and HWID as empty
+            const uid = '228';
+            const hwid = '';
+            
+            const accountModal = document.createElement('div');
+            accountModal.className = 'modal show';
+            accountModal.innerHTML = `
+                <div class="modal-content" style="max-width: 500px;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                    <h2 class="modal-title">Account Information</h2>
+                    <div style="padding: 20px;">
+                        <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 24px; margin-bottom: 20px; backdrop-filter: blur(20px); text-align: center;">
+                            <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #6366f1, #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; backdrop-filter: blur(15px);">
+                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                                </svg>
+                            </div>
+                            <h3 style="color: #ffffff; margin-bottom: 8px; font-size: 24px;">${username}</h3>
+                            <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">Quiet Client User</p>
+                        </div>
+                        
+                        <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; margin-bottom: 16px; backdrop-filter: blur(20px);">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span style="color: rgba(255, 255, 255, 0.8);">Status:</span>
+                                <span style="color: #10b981; font-weight: 600;">Active</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span style="color: rgba(255, 255, 255, 0.8);">Plan:</span>
+                                <span style="color: #f59e0b; font-weight: 600;">Premium Subscription</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span style="color: rgba(255, 255, 255, 0.8);">Member since:</span>
+                                <span style="color: #ffffff; font-weight: 600;">${loginDate}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                                <span style="color: rgba(255, 255, 255, 0.8);">UID:</span>
+                                <span style="color: #8b5cf6; font-weight: 600; font-family: monospace;">${uid}</span>
+                            </div>
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <span style="color: rgba(255, 255, 255, 0.8);">HWID:</span>
+                                <span style="color: #6b7280; font-weight: 600; font-family: monospace; font-size: 12px;">${hwid || 'Not set'}</span>
+                            </div>
+                        </div>
+                        
+                        <button class="btn-modal" onclick="downloadLauncher()" style="margin-bottom: 12px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
+                                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            Download Launcher
+                        </button>
+                        
+                        <button class="btn-modal" onclick="logout()" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #ffffff;">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(accountModal);
+        }
+
+        // Function to download launcher
+        function downloadLauncher() {
+            console.log('Downloading launcher...');
+            
+            // Create download notification
+            const downloadModal = document.createElement('div');
+            downloadModal.className = 'modal show';
+            downloadModal.innerHTML = `
+                <div class="modal-content">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                    <h2 class="modal-title">Download Started</h2>
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 30px; backdrop-filter: blur(20px); margin-bottom: 20px;">
+                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #10b981; margin-bottom: 16px;">
+                                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            <h3 style="color: #ffffff; margin-bottom: 16px;">Quiet Launcher</h3>
+                            <p style="color: rgba(255, 255, 255, 0.8);">Your download has started successfully!</p>
+                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-top: 12px;">File: QuietLauncher.exe (2.4 MB)</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(downloadModal);
+            
+            // Auto close after 3 seconds
+            setTimeout(() => {
+                downloadModal.remove();
+            }, 3000);
+        }
+
+        // Function to logout
+        function logout() {
+            localStorage.removeItem('isLoggedIn');
+            localStorage.removeItem('username');
+            localStorage.removeItem('loginDate');
+            
+            // Restore original navigation
+            const navRight = document.querySelector('.nav-right');
+            navRight.innerHTML = `
+                <span class="btn-register" onclick="openRegisterModal();">Register</span>
+                <button class="btn-login" onclick="openLoginModal();">Login</button>
+            `;
+            navRight.classList.remove('logged-in');
+            
+            // Close modal
+            document.querySelectorAll('.modal').forEach(modal => modal.remove());
+        }
+
+        // Check if user is already logged in on page load
+        function checkLoginStatus() {
+            if (localStorage.getItem('isLoggedIn') === 'true') {
+                updateNavigation();
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const loginModal = document.getElementById('loginModal');
+            const registerModal = document.getElementById('registerModal');
+            
+            if (event.target === loginModal) {
+                closeModal('loginModal');
+            }
+            if (event.target === registerModal) {
+                closeModal('registerModal');
+            }
+        }
+
+        // Counter animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.stat-number');
+            const targets = [1247, 8965, 156, 89];
+            
+            counters.forEach((counter, index) => {
+                const target = targets[index];
+                const increment = target / 100;
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        counter.textContent = target.toLocaleString();
+                        clearInterval(timer);
+                    } else {
+                        counter.textContent = Math.floor(current).toLocaleString();
+                    }
+                }, 20);
+            });
+        }
+
+        // Plan selection function
+        function selectPlan(planType) {
+            let planName = '';
+            let price = '';
+            
+            switch(planType) {
+                case 'month':
+                    planName = 'Месячный план';
+                    price = '250 рублей';
+                    break;
+                case 'year':
+                    planName = 'Годовой план';
+                    price = '450 рублей';
+                    break;
+                case 'lifetime':
+                    planName = 'ЛайфТайм';
+                    price = '550 рублей';
+                    break;
+            }
+            
+            console.log(`Selected plan: ${planName} - ${price}`);
+            
+            // Create purchase modal
+            const purchaseModal = document.createElement('div');
+            purchaseModal.className = 'modal show';
+            purchaseModal.innerHTML = `
+                <div class="modal-content">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                    <h2 class="modal-title">Подтверждение покупки</h2>
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 30px; backdrop-filter: blur(20px); margin-bottom: 20px;">
+                            <h3 style="color: #ffffff; margin-bottom: 16px;">${planName}</h3>
+                            <div style="font-size: 32px; font-weight: 700; color: #6366f1; margin-bottom: 16px;">${price}</div>
+                            <p style="color: rgba(255, 255, 255, 0.8);">Вы выбрали отличный план!</p>
+                        </div>
+                        <button class="btn-modal" onclick="processPurchase('${planType}')">Перейти к оплате</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(purchaseModal);
+        }
+        
+        // Process purchase function
+        function processPurchase(planType) {
+            console.log(`Processing purchase for: ${planType}`);
+            // Here you would integrate with payment system
+            alert('Функция оплаты будет добавлена позже!');
+        }
+
+        // FAQ toggle function
+        function toggleFaq(element) {
+            const answer = element.nextElementSibling;
+            const icon = element.querySelector('.faq-icon-toggle');
+            
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-answer').forEach(item => {
+                if (item !== answer) {
+                    item.classList.remove('show');
+                }
+            });
+            
+            document.querySelectorAll('.faq-icon-toggle').forEach(item => {
+                if (item !== icon) {
+                    item.classList.remove('rotated');
+                }
+            });
+            
+            // Toggle current FAQ item
+            answer.classList.toggle('show');
+            icon.classList.toggle('rotated');
+        }
+
+        // Navigation functions
+        function navigateToHome() {
+            console.log('Navigating to Home');
+            // Scroll to top
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function navigateToAdvantages() {
+            console.log('Navigating to Advantages');
+            // Scroll to stats section
+            document.querySelector('.stats-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function navigateToVideo() {
+            console.log('Navigating to Video');
+            // Create and show video modal or redirect
+            showVideoModal();
+        }
+
+        function navigateToFaq() {
+            console.log('Navigating to FAQ');
+            // Scroll to FAQ section
+            document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function navigateToProducts() {
+            console.log('Navigating to Products');
+            // Scroll to pricing section
+            document.querySelector('.pricing-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Video modal function
+        function showVideoModal() {
+            const videoModal = document.createElement('div');
+            videoModal.className = 'modal show';
+            videoModal.innerHTML = `
+                <div class="modal-content" style="max-width: 800px; width: 95%;">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                    <h2 class="modal-title">Quiet Demo Video</h2>
+                    <div style="text-align: center; padding: 20px;">
+                        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);">
+                            <iframe 
+                                src="https://www.youtube.com/embed/e8mKA5Lryg8" 
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px;"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        <p style="color: rgba(255, 255, 255, 0.8); margin-top: 20px; font-size: 14px;">
+                            Watch how Quiet Client transforms your gaming experience
+                        </p>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(videoModal);
+        }
+
+        // Products modal function
+        function showProductsModal() {
+            const productsModal = document.createElement('div');
+            productsModal.className = 'modal show';
+            productsModal.innerHTML = `
+                <div class="modal-content">
+                    <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
+                    <h2 class="modal-title">Our Products</h2>
+                    <div style="padding: 20px;">
+                        <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; margin-bottom: 16px; backdrop-filter: blur(20px);">
+                            <h3 style="color: #ffffff; margin-bottom: 8px;">Quiet Client</h3>
+                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Advanced gaming client with premium features</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; margin-bottom: 16px; backdrop-filter: blur(20px);">
+                            <h3 style="color: #ffffff; margin-bottom: 8px;">Quiet Pro</h3>
+                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Professional version with extended capabilities</p>
+                        </div>
+                        <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; backdrop-filter: blur(20px);">
+                            <h3 style="color: #ffffff; margin-bottom: 8px;">Quiet Enterprise</h3>
+                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Enterprise solution for teams and organizations</p>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(productsModal);
+        }
+
+        // Hero buttons functions
+        function showProductsFromHero() {
+            navigateToProducts();
+        }
+
+        function showAdvantagesFromHero() {
+            navigateToAdvantages();
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(animateCounters, 1000);
+            checkLoginStatus(); // Check if user is already logged in
+        });
+    </script>
+</body>
+</html>
