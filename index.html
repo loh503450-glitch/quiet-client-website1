@@ -1026,16 +1026,9 @@
                         </svg>
                         Products
                     </a>
-                    <a class="nav-link" onclick="toggleAdminPanel()" style="color: #ef4444 !important; font-weight: 700 !important;">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 1L3 5V11C3 16.55 6.84 21.74 12 23C17.16 21.74 21 16.55 21 11V5L12 1Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        </svg>
-                        ADMIN PANEL
-                    </a>
                 </div>
             </div>
             <div class="nav-right" id="navRight">
-                <button class="btn-admin" onclick="toggleAdminPanel()" style="margin-right: 8px;">Admin Panel</button>
                 <span class="btn-register" onclick="openRegisterModal();">Register</span>
                 <button class="btn-login" onclick="openLoginModal();">Login</button>
             </div>
@@ -1425,6 +1418,12 @@
         }
 
         async function loadUsers() {
+            // Проверяем доступ - только popa123
+            if (!currentUser || currentUser.username !== 'popa123') {
+                console.log('Access denied: loadUsers only for popa123');
+                return;
+            }
+            
             const tableBody = document.getElementById('usersTableBody');
             if (!tableBody) return;
             
@@ -1589,6 +1588,13 @@
         }
 
         function showSubscriptionModal(username) {
+            // Проверяем доступ - только popa123
+            if (!currentUser || currentUser.username !== 'popa123') {
+                console.log('Access denied: showSubscriptionModal only for popa123');
+                showNotification('❌ Доступ запрещен!', 'error');
+                return;
+            }
+            
             const modal = document.createElement('div');
             modal.className = 'modal show';
             modal.innerHTML = `
@@ -1775,6 +1781,13 @@
         }
 
         async function showUserDetailsModal(username) {
+            // Проверяем доступ - только popa123
+            if (!currentUser || currentUser.username !== 'popa123') {
+                console.log('Access denied: showUserDetailsModal only for popa123');
+                showNotification('❌ Доступ запрещен!', 'error');
+                return;
+            }
+            
             console.log('showUserDetailsModal called for:', username);
             
             // Загружаем актуальные данные пользователя
@@ -1881,6 +1894,13 @@
         }
 
         async function toggleUserAdmin(username) {
+            // Проверяем доступ - только popa123
+            if (!currentUser || currentUser.username !== 'popa123') {
+                console.log('Access denied: toggleUserAdmin only for popa123');
+                showNotification('❌ Доступ запрещен!', 'error');
+                return;
+            }
+            
             console.log('toggleUserAdmin called for:', username);
             
             if (!confirm(`Вы уверены что хотите изменить права администратора для ${username}?`)) {
@@ -1945,6 +1965,13 @@
         }
 
         async function setUserHWID(username) {
+            // Проверяем доступ - только popa123
+            if (!currentUser || currentUser.username !== 'popa123') {
+                console.log('Access denied: setUserHWID only for popa123');
+                showNotification('❌ Доступ запрещен!', 'error');
+                return;
+            }
+            
             const hwid = prompt(`Введите HWID для пользователя ${username}:`);
             if (hwid === null) return; // Отмена
             
@@ -1986,6 +2013,13 @@
         }
 
         async function removeSubscription(username) {
+            // Проверяем доступ - только popa123
+            if (!currentUser || currentUser.username !== 'popa123') {
+                console.log('Access denied: removeSubscription only for popa123');
+                showNotification('❌ Доступ запрещен!', 'error');
+                return;
+            }
+            
             await removeUserSubscription(username);
         }
 
@@ -2269,8 +2303,9 @@
                 updateNavigation();
                 closeModal('loginModal');
                 
-                if (user.role === 'admin') {
-                    console.log('Admin detected, auto-showing admin panel');
+                // Автоматически показываем админ панель ТОЛЬКО для popa123
+                if (user.username === 'popa123') {
+                    console.log('popa123 detected, auto-showing admin panel');
                     setTimeout(() => {
                         showAdminPanel();
                     }, 500);
@@ -2288,10 +2323,11 @@
             if (currentUser) {
                 console.log('Updating navigation for user:', currentUser.username, 'Role:', currentUser.role);
                 
+                // Админ панель ТОЛЬКО для popa123
                 let adminButton = '';
-                if (currentUser.role === 'admin') {
+                if (currentUser.username === 'popa123') {
                     adminButton = '<button class="btn-admin" onclick="toggleAdminPanel()" style="margin-right: 8px;">Admin Panel</button>';
-                    console.log('Admin button added to navigation');
+                    console.log('Admin button added to navigation for popa123');
                 }
                 
                 navRight.innerHTML = `
@@ -2401,8 +2437,14 @@
             console.log('User logged out');
         }
 
-        // Admin panel functions
+        // Admin panel functions - ТОЛЬКО для popa123
         function showAdminPanel() {
+            if (!currentUser || currentUser.username !== 'popa123') {
+                console.log('Access denied: Admin panel only for popa123');
+                showNotification('❌ Доступ запрещен! Админ панель только для popa123', 'error');
+                return;
+            }
+            
             document.getElementById('mainContent').style.display = 'none';
             document.getElementById('adminPanel').classList.add('show');
             loadUsers();
@@ -2414,6 +2456,12 @@
         }
 
         function toggleAdminPanel() {
+            if (!currentUser || currentUser.username !== 'popa123') {
+                console.log('Access denied: Admin panel only for popa123');
+                showNotification('❌ Доступ запрещен! Админ панель только для popa123', 'error');
+                return;
+            }
+            
             const adminPanel = document.getElementById('adminPanel');
             const mainContent = document.getElementById('mainContent');
             
