@@ -1964,6 +1964,27 @@
             alert(`Кнопка "${action}" работает для пользователя ${username}`);
         }
 
+        // Функция для полной очистки админских элементов
+        function clearAllAdminElements() {
+            // Скрываем админ панель
+            const adminPanel = document.getElementById('adminPanel');
+            if (adminPanel) {
+                adminPanel.classList.remove('show');
+            }
+            
+            // Показываем основной контент
+            const mainContent = document.getElementById('mainContent');
+            if (mainContent) {
+                mainContent.style.display = 'block';
+            }
+            
+            // Убираем все кнопки админки из DOM
+            const adminButtons = document.querySelectorAll('.btn-admin');
+            adminButtons.forEach(button => button.remove());
+            
+            console.log('All admin elements cleared');
+        }
+
         async function setUserHWID(username) {
             // Проверяем доступ - только popa123
             if (!currentUser || currentUser.username !== 'popa123') {
@@ -2343,10 +2364,21 @@
                     <button class="btn-login" onclick="logout()">Logout</button>
                 `;
             } else {
+                // Пользователь не залогинен - убираем все админские элементы
                 navRight.innerHTML = `
                     <span class="btn-register" onclick="openRegisterModal();">Register</span>
                     <button class="btn-login" onclick="openLoginModal();">Login</button>
                 `;
+                
+                // Принудительно скрываем админ панель
+                const adminPanel = document.getElementById('adminPanel');
+                if (adminPanel) {
+                    adminPanel.classList.remove('show');
+                }
+                const mainContent = document.getElementById('mainContent');
+                if (mainContent) {
+                    mainContent.style.display = 'block';
+                }
             }
         }
 
@@ -2432,8 +2464,13 @@
         function logout() {
             currentUser = null;
             localStorage.removeItem('currentUser');
+            
+            // Полная очистка всех админских элементов
+            clearAllAdminElements();
+            
+            // Обновляем навигацию
             updateNavigation();
-            hideAdminPanel();
+            
             console.log('User logged out');
         }
 
@@ -2641,6 +2678,9 @@
         // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', async function() {
             console.log('DOM loaded, initializing...');
+            
+            // Полная очистка всех админских элементов при загрузке
+            clearAllAdminElements();
             
             // Load existing users from JSONBin first, then fallback to localStorage
             if (isDatabaseConfigured) {
