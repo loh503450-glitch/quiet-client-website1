@@ -1513,13 +1513,18 @@
                         subscriptionColor = 'status-active';
                     }
                     
-                    // Определяем UID (если нет, присваиваем)
-                    if (!user.uid) {
+                    // Определяем UID (если нет, присваиваем и сохраняем)
+                    if (!user.uid && user.uid !== 0) {
                         user.uid = regularUsers.indexOf(user) + 1;
+                        console.log(`Assigned UID ${user.uid} to user ${user.username}`);
+                        // Сохраняем обновленного пользователя
+                        saveUsersToDatabase(users);
                     }
                     
+                    console.log(`Displaying user: ${user.username}, UID: ${user.uid}`);
+                    
                     row.innerHTML = `
-                        <div style="font-weight: 600; color: #6366f1;">#${user.uid}</div>
+                        <div style="font-weight: 600; color: #6366f1;">#${user.uid || '?'}</div>
                         <div>${user.username}</div>
                         <div>${user.email}</div>
                         <div>${new Date(user.registrationDate || user.created_at).toLocaleDateString()}</div>
@@ -1528,19 +1533,19 @@
                         </div>
                         <div style="display: flex; gap: 6px; flex-wrap: wrap;">
                             <button class="btn-small" onclick="showSubscriptionModal('${user.username}')" 
-                                    style="background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4);">
+                                    style="background: rgba(99, 102, 241, 0.2); border-color: rgba(99, 102, 241, 0.4); font-size: 11px;">
                                 📅 Подписка
                             </button>
                             <button class="btn-small" onclick="showUserDetailsModal('${user.username}')" 
-                                    style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4);">
-                                👤 Детали
+                                    style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.4); font-size: 11px;">
+                                � Детали
                             </button>
                             <button class="btn-small" onclick="toggleUserAdmin('${user.username}')" 
-                                    style="background: rgba(255, 193, 7, 0.2); border-color: rgba(255, 193, 7, 0.4);">
-                                👑 Админ
+                                    style="background: rgba(255, 193, 7, 0.2); border-color: rgba(255, 193, 7, 0.4); font-size: 11px;">
+                                � Админ
                             </button>
                             <button class="btn-small" onclick="removeSubscription('${user.username}')" 
-                                    style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4);">
+                                    style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); font-size: 11px;">
                                 🗑️ Удалить
                             </button>
                         </div>
@@ -1770,6 +1775,8 @@
         }
 
         async function showUserDetailsModal(username) {
+            console.log('showUserDetailsModal called for:', username);
+            
             // Загружаем актуальные данные пользователя
             let users = [];
             
@@ -1793,7 +1800,13 @@
             }
             
             const user = users.find(u => u.username === username);
-            if (!user) return;
+            if (!user) {
+                console.error('User not found:', username);
+                showNotification(`❌ Пользователь ${username} не найден`, 'error');
+                return;
+            }
+            
+            console.log('Found user:', user);
             
             // Определяем статус подписки
             let subscriptionInfo = 'Неактивна';
@@ -1833,11 +1846,11 @@
                                     <span style="color: #6366f1; font-weight: 600; font-size: 18px;">#${user.uid || 'Не назначен'}</span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="color: rgba(255, 255, 255, 0.8);">📧 Email:</span>
+                                    <span style="color: rgba(255, 255, 255, 0.8);">� Email:</span>
                                     <span style="color: #ffffff; font-weight: 500;">${user.email}</span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                                    <span style="color: rgba(255, 255, 255, 0.8);">📅 Регистрация:</span>
+                                    <span style="color: rgba(255, 255, 255, 0.8);">� Регистрация:</span>
                                     <span style="color: #ffffff; font-weight: 500;">${new Date(user.registrationDate || user.created_at).toLocaleDateString()}</span>
                                 </div>
                                 <div style="display: flex; justify-content: space-between; align-items: center;">
@@ -1868,6 +1881,8 @@
         }
 
         async function toggleUserAdmin(username) {
+            console.log('toggleUserAdmin called for:', username);
+            
             if (!confirm(`Вы уверены что хотите изменить права администратора для ${username}?`)) {
                 return;
             }
@@ -1897,24 +1912,36 @@
                     const wasAdmin = user.role === 'admin';
                     user.role = wasAdmin ? 'user' : 'admin';
                     
+                    console.log(`Changing ${username} from ${wasAdmin ? 'admin' : 'user'} to ${user.role}`);
+                    
                     // Если делаем админом, активируем подписку
                     if (user.role === 'admin') {
                         user.subscription = 'active';
                         user.subscription_end = new Date('2099-12-31').toISOString();
                     }
+                    
+                    // Сохраняем обновленную базу данных
+                    await saveUsersToDatabase(users);
+                    
+                    console.log('✅ Admin rights toggled for:', username, 'New role:', user.role);
+                    
+                    loadUsers();
+                    showNotification(`👑 ${username} теперь ${user.role === 'admin' ? 'администратор' : 'пользователь'}`, 'success');
+                } else {
+                    console.error('User not found:', username);
+                    showNotification(`❌ Пользователь ${username} не найден`, 'error');
                 }
                 
-                // Сохраняем обновленную базу данных
-                await saveUsersToDatabase(users);
-                
-                console.log('✅ Admin rights toggled for:', username);
             } catch (error) {
                 console.error('❌ Error toggling admin rights:', error);
+                showNotification('❌ Ошибка при изменении прав администратора', 'error');
             }
-            
-            loadUsers();
-            const newRole = users.find(u => u.username === username)?.role;
-            showNotification(`👑 ${username} теперь ${newRole === 'admin' ? 'администратор' : 'пользователь'}`, 'success');
+        }
+
+        // Test function to check if buttons work
+        function testButton(action, username) {
+            console.log(`Test button clicked: ${action} for ${username}`);
+            alert(`Кнопка "${action}" работает для пользователя ${username}`);
         }
 
         async function setUserHWID(username) {
