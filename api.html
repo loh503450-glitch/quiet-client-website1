@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiet Client API</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background: #0a0a0a;
+            color: #00ff00;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .endpoint {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .method {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+        .url {
+            color: #4ecdc4;
+            font-weight: bold;
+        }
+        pre {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .test-area {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        input, button {
+            background: rgba(0, 255, 0, 0.1);
+            border: 1px solid #00ff00;
+            color: #00ff00;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: rgba(0, 255, 0, 0.2);
+            cursor: pointer;
+        }
+        #result {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔌 Quiet Client API</h1>
+        <p>API для подключения лоадера к сайту Quiet Client</p>
+
+        <div class="endpoint">
+            <h3><span class="method">POST</span> <span class="url">/api/login</span></h3>
+            <p>Проверка данных пользователя для лоадера</p>
+            
+            <h4>Параметры:</h4>
+            <pre>{
+  "username": "string",  // Логин или email
+  "password": "string"   // Пароль
+}</pre>
+
+            <h4>Ответ при успехе:</h4>
+            <pre>{
+  "success": true,
+  "user": {
+    "uid": 1,
+    "username": "d1ago",
+    "email": "d1ago@example.com",
+    "subscription": {
+      "active": true,
+      "end_date": "2024-12-31T23:59:59.000Z",
+      "status": "active"
+    },
+    "hwid": "ABC123DEF456",
+    "role": "user",
+    "registration_date": "2024-02-25T10:30:00.000Z"
+  }
+}</pre>
+
+            <h4>Ответ при ошибке:</h4>
+            <pre>{
+  "success": false,
+  "message": "Invalid credentials"
+}</pre>
+        </div>
+
+        <div class="endpoint">
+            <h3><span class="method">POST</span> <span class="url">/api/update-hwid</span></h3>
+            <p>Обновление HWID пользователя (привязка к ПК)</p>
+            
+            <h4>Параметры:</h4>
+            <pre>{
+  "username": "string",
+  "hwid": "string"
+}</pre>
+
+            <h4>Ответ:</h4>
+            <pre>{
+  "success": true,
+  "message": "HWID updated successfully"
+}</pre>
+        </div>
+
+        <div class="test-area">
+            <h3>🧪 Тестирование API</h3>
+            <div>
+                <input type="text" id="testUsername" placeholder="Username" value="d1ago">
+                <input type="password" id="testPassword" placeholder="Password" value="123456">
+                <button onclick="testLogin()">Тест Login</button>
+            </div>
+            <div>
+                <input type="text" id="testHwidUser" placeholder="Username" value="d1ago">
+                <input type="text" id="testHwid" placeholder="HWID" value="PC-12345-ABCDEF">
+                <button onclick="testUpdateHWID()">Тест Update HWID</button>
+            </div>
+            <div id="result"></div>
+        </div>
+
+        <div class="endpoint">
+            <h3>📋 Инструкция для лоадера</h3>
+            <p>Как подключить лоадер к сайту:</p>
+            
+            <h4>1. Проверка пользователя:</h4>
+            <pre>// JavaScript пример
+const response = await fetch('https://your-site.com/api.html', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    action: 'login',
+    username: 'd1ago',
+    password: '123456'
+  })
+});
+
+const data = await response.json();
+if (data.success) {
+  console.log('User UID:', data.user.uid);
+  console.log('Subscription:', data.user.subscription.active);
+  console.log('HWID:', data.user.hwid);
+}</pre>
+
+            <h4>2. Обновление HWID:</h4>
+            <pre>// Когда лоадер запускается первый раз
+const hwid = getComputerHWID(); // Ваша функция получения HWID
+await fetch('https://your-site.com/api.html', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    action: 'update_hwid',
+    username: 'd1ago',
+    hwid: hwid
+  })
+});</pre>
+        </div>
+    </div>
+
+    <script>
+        // JSONBin конфигурация (такая же как на сайте)
+        const JSONBIN_API_KEY = '$2a$10$yVklLNiv63QjxQc8Ucu85OHvkWET7OuBDBh2l2bYINIJS1.NXiOm.';
+        const JSONBIN_BIN_ID = '699eeaa3ae596e708f4885b3';
+        const isDatabaseConfigured = true;
+
+        // API функции
+        async function apiLogin(username, password) {
+            try {
+                console.log('API Login request:', username);
+                
+                // Загружаем пользователей из JSONBin
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load database');
+                }
+                
+                const data = await response.json();
+                const users = data.record || [];
+                
+                // Ищем пользователя
+                const user = users.find(u => 
+                    (u.username === username || u.email === username) && 
+                    u.password === password
+                );
+                
+                if (!user) {
+                    return {
+                        success: false,
+                        message: 'Invalid credentials'
+                    };
+                }
+                
+                // Проверяем подписку
+                let subscriptionActive = false;
+                let subscriptionEnd = null;
+                
+                if (user.subscription_end) {
+                    const endDate = new Date(user.subscription_end);
+                    const now = new Date();
+                    subscriptionActive = endDate > now;
+                    subscriptionEnd = user.subscription_end;
+                } else if (user.subscription === 'active') {
+                    subscriptionActive = true;
+                }
+                
+                return {
+                    success: true,
+                    user: {
+                        uid: user.uid || 0,
+                        username: user.username,
+                        email: user.email,
+                        subscription: {
+                            active: subscriptionActive,
+                            end_date: subscriptionEnd,
+                            status: subscriptionActive ? 'active' : 'inactive'
+                        },
+                        hwid: user.hwid || '',
+                        role: user.role || 'user',
+                        registration_date: user.registrationDate || user.created_at
+                    }
+                };
+                
+            } catch (error) {
+                console.error('API Login error:', error);
+                return {
+                    success: false,
+                    message: 'Server error: ' + error.message
+                };
+            }
+        }
+
+        async function apiUpdateHWID(username, hwid) {
+            try {
+                console.log('API Update HWID request:', username, hwid);
+                
+                // Загружаем пользователей
+                const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
+                    headers: {
+                        'X-Master-Key': JSONBIN_API_KEY
+                    }
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to load database');
+                }
+                
+                const data = await response.json();
+                const users = data.record || [];
+                
+                // Находим пользователя
+                const user = users.find(u => u.username === username);
+                if (!user) {
+                    return {
+                        success: false,
+                        message: 'User not found'
+                    };
+                }
+                
+                // Обновляем HWID
+                user.hwid = hwid;
+                
+                // Сохраняем в JSONBin
+                const updateResponse = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Master-Key': JSONBIN_API_KEY
+                    },
+                    body: JSON.stringify(users)
+                });
+                
+                if (!updateResponse.ok) {
+                    throw new Error('Failed to update database');
+                }
+                
+                return {
+                    success: true,
+                    message: 'HWID updated successfully'
+                };
+                
+            } catch (error) {
+                console.error('API Update HWID error:', error);
+                return {
+                    success: false,
+                    message: 'Server error: ' + error.message
+                };
+            }
+        }
+
+        // Обработка POST запросов (эмуляция)
+        async function handleAPIRequest(action, params) {
+            switch (action) {
+                case 'login':
+                    return await apiLogin(params.username, params.password);
+                case 'update_hwid':
+                    return await apiUpdateHWID(params.username, params.hwid);
+                default:
+                    return {
+                        success: false,
+                        message: 'Unknown action'
+                    };
+            }
+        }
+
+        // Тестовые функции
+        async function testLogin() {
+            const username = document.getElementById('testUsername').value;
+            const password = document.getElementById('testPassword').value;
+            const result = document.getElementById('result');
+            
+            result.textContent = 'Loading...';
+            
+            try {
+                const response = await apiLogin(username, password);
+                result.textContent = JSON.stringify(response, null, 2);
+            } catch (error) {
+                result.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        async function testUpdateHWID() {
+            const username = document.getElementById('testHwidUser').value;
+            const hwid = document.getElementById('testHwid').value;
+            const result = document.getElementById('result');
+            
+            result.textContent = 'Loading...';
+            
+            try {
+                const response = await apiUpdateHWID(username, hwid);
+                result.textContent = JSON.stringify(response, null, 2);
+            } catch (error) {
+                result.textContent = 'Error: ' + error.message;
+            }
+        }
+
+        // Глобальный API для внешнего использования
+        window.QuietLoaderAPI = {
+            login: apiLogin,
+            updateHWID: apiUpdateHWID
+        };
+
+        console.log('Quiet Loader API ready!');
+        console.log('Available functions: QuietLoaderAPI.login(), QuietLoaderAPI.updateHWID()');
+    </script>
+</body>
+</html>
