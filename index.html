@@ -22,7 +22,6 @@
             overflow-x: hidden;
             position: relative;
             scroll-behavior: smooth;
-            scroll-snap-type: y mandatory;
         }
 
         /* Background blur effect */
@@ -59,6 +58,7 @@
             align-items: center;
             justify-content: space-between;
         }
+        
         .nav-left {
             display: flex;
             align-items: center;
@@ -103,6 +103,7 @@
             display: flex;
             align-items: center;
             gap: 6px;
+            cursor: pointer;
         }
 
         .nav-link:hover {
@@ -119,35 +120,7 @@
             gap: 16px;
         }
 
-        .language-selector {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #9ca3af;
-            font-size: 14px;
-        }
-        .btn-login {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-        }
-
-        .btn-login:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
-        }
-
-        .btn-register {
+        .btn-login, .btn-register, .btn-account, .btn-admin {
             background: rgba(255, 255, 255, 0.1);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -160,42 +133,20 @@
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             text-decoration: none;
-            display: inline-block;
-        }
-
-        .btn-register:hover {
-            background: rgba(255, 255, 255, 0.15);
-            border-color: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
-        }
-
-        .btn-account {
-            background: rgba(255, 255, 255, 0.1);
-            color: #ffffff;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 8px;
         }
-
-        .btn-account:hover {
+        .btn-login:hover, .btn-register:hover, .btn-account:hover, .btn-admin:hover {
             background: rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(35px);
             -webkit-backdrop-filter: blur(35px);
         }
 
-        .nav-right.logged-in {
-            justify-content: flex-end;
+        .btn-admin {
+            background: rgba(239, 68, 68, 0.2);
+            border-color: rgba(239, 68, 68, 0.4);
         }
 
         /* Hero Section */
@@ -209,7 +160,6 @@
             position: relative;
             z-index: 2;
             padding: 120px 40px 80px;
-            scroll-snap-align: start;
         }
 
         .hero-logo {
@@ -247,6 +197,7 @@
             margin-bottom: 40px;
             max-width: 600px;
         }
+        
         .hero-buttons {
             display: flex;
             gap: 16px;
@@ -254,7 +205,7 @@
             flex-wrap: wrap;
         }
 
-        .btn-primary {
+        .btn-primary, .btn-secondary {
             background: rgba(255, 255, 255, 0.1);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.2);
@@ -270,8 +221,7 @@
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
         }
-
-        .btn-primary:hover {
+        .btn-primary:hover, .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.15);
             border-color: rgba(255, 255, 255, 0.3);
             transform: translateY(-1px);
@@ -281,27 +231,12 @@
 
         .btn-secondary {
             background: rgba(255, 255, 255, 0.08);
-            color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 12px 24px;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            backdrop-filter: blur(30px);
-            -webkit-backdrop-filter: blur(30px);
         }
 
         .btn-secondary:hover {
             background: rgba(255, 255, 255, 0.12);
             border-color: rgba(255, 255, 255, 0.25);
-            transform: translateY(-1px);
-            backdrop-filter: blur(35px);
-            -webkit-backdrop-filter: blur(35px);
         }
 
         /* Stats Section */
@@ -313,7 +248,6 @@
             padding: 80px 40px;
             position: relative;
             z-index: 2;
-            scroll-snap-align: start;
         }
 
         .stats-container {
@@ -323,6 +257,7 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 32px;
         }
+        
         .stat-card {
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -358,7 +293,6 @@
             justify-content: center;
             gap: 6px;
         }
-
         /* FAQ Section */
         .faq-section {
             min-height: 100vh;
@@ -368,7 +302,40 @@
             padding: 80px 40px;
             position: relative;
             z-index: 2;
-            scroll-snap-align: start;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .faq-icon {
+            width: 48px;
+            height: 48px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 24px;
+            color: #9ca3af;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        
+        .faq-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .faq-subtitle {
+            font-size: 16px;
+            color: #9ca3af;
+            line-height: 1.6;
+            margin-bottom: 40px;
         }
 
         .faq-item {
@@ -414,17 +381,15 @@
         .faq-icon-toggle {
             transition: transform 0.3s ease;
         }
-
         /* Pricing Section */
         .pricing-section {
-            min-height: 100vh;
+            min-height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 80px 40px;
+            padding: 80px 40px 40px;
             position: relative;
             z-index: 2;
-            scroll-snap-align: start;
         }
 
         .pricing-container {
@@ -499,7 +464,6 @@
             font-weight: 600;
             transform: rotate(45deg);
         }
-
         .pricing-plan {
             font-size: 24px;
             font-weight: 600;
@@ -570,37 +534,52 @@
             backdrop-filter: blur(35px);
             -webkit-backdrop-filter: blur(35px);
         }
+        /* Footer */
+        .footer {
+            padding: 60px 20px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-top: 2px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            z-index: 100;
+            width: 100%;
+            margin-top: 100px;
+        }
 
-        .faq-container {
+        .footer-content {
             max-width: 800px;
             margin: 0 auto;
-            text-align: center;
         }
 
-        .faq-icon {
-            width: 48px;
-            height: 48px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 24px;
-            color: #9ca3af;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .faq-title {
-            font-size: 32px;
-            font-weight: 600;
-            margin-bottom: 16px;
+        .footer-protection {
+            font-size: 20px;
             color: #ffffff;
+            margin-bottom: 20px;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
 
-        .faq-subtitle {
+        .footer-contact {
             font-size: 16px;
-            color: #9ca3af;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 10px;
             line-height: 1.6;
+        }
+
+        .footer-link {
+            color: #6366f1;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .footer-link:hover {
+            color: #8b5cf6;
+            text-decoration: underline;
+            text-shadow: 0 0 8px rgba(139, 92, 246, 0.5);
         }
 
         /* Modal Styles */
@@ -635,7 +614,6 @@
             -webkit-backdrop-filter: blur(40px);
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
         }
-
         .modal-close {
             position: absolute;
             top: 20px;
@@ -652,6 +630,7 @@
         .modal-close:hover {
             color: #ffffff;
         }
+        
         .modal-title {
             font-size: 28px;
             font-weight: 600;
@@ -735,6 +714,116 @@
             color: #e0e7ff;
         }
 
+        /* Admin Panel Styles */
+        .admin-panel {
+            display: none;
+            min-height: 100vh;
+            padding: 120px 40px 80px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .admin-panel.show {
+            display: block;
+        }
+
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .admin-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 32px;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .users-table {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table-header {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 150px;
+            gap: 20px;
+            font-weight: 600;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .table-row {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 150px;
+            gap: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            align-items: center;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .status-active {
+            color: #10b981;
+            font-weight: 600;
+        }
+
+        .status-inactive {
+            color: #ef4444;
+            font-weight: 600;
+        }
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 12px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ffffff;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .btn-small:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .error-message, .success-message {
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 16px;
+            color: #ffffff;
+            font-size: 14px;
+            text-align: center;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .error-message {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.4);
+        }
+
+        .success-message {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.4);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
         /* Responsive Design */
         @media (max-width: 768px) {
             .nav-container {
@@ -777,6 +866,15 @@
                 max-width: 100%;
                 width: 100%;
             }
+
+            .table-header, .table-row {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .admin-panel {
+                padding: 120px 20px 80px;
+            }
         }
 
         @media (max-width: 480px) {
@@ -797,26 +895,26 @@
                 </div>
                 
                 <div class="nav-links">
-                    <a href="#" class="nav-link active" onclick="navigateToHome()">
+                    <a class="nav-link active" onclick="navigateToHome()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M3 9L12 2L21 9V20C21 20.5304 20.7893 21.0391 20.4142 21.4142C20.0391 21.7893 19.5304 22 19 22H5C4.46957 22 3.96086 21.7893 3.58579 21.4142C3.21071 21.0391 3 20.5304 3 20V9Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                             <path d="M9 22V12H15V22" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                         </svg>
                         Home
                     </a>
-                    <a href="#" class="nav-link" onclick="navigateToAdvantages()">
+                    <a class="nav-link" onclick="navigateToAdvantages()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
                         </svg>
                         Advantages
                     </a>
-                    <a href="#" class="nav-link" onclick="navigateToVideo()">
+                    <a class="nav-link" onclick="navigateToVideo()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <polygon points="5,3 19,12 5,21 5,3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                         </svg>
                         Video
                     </a>
-                    <a href="#" class="nav-link" onclick="navigateToFaq()">
+                    <a class="nav-link" onclick="navigateToFaq()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
                             <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -824,7 +922,7 @@
                         </svg>
                         Faq
                     </a>
-                    <a href="#" class="nav-link" onclick="navigateToProducts()">
+                    <a class="nav-link" onclick="navigateToProducts()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -834,285 +932,312 @@
                     </a>
                 </div>
             </div>
-            <div class="nav-right">
+            <div class="nav-right" id="navRight">
+                <button class="btn-admin" onclick="toggleAdminPanel()" style="margin-right: 8px;">Admin Panel</button>
                 <span class="btn-register" onclick="openRegisterModal();">Register</span>
-                <button class="btn-login" onclick="openLoginModal();">
-                    Login
-                </button>
+                <button class="btn-login" onclick="openLoginModal();">Login</button>
             </div>
         </div>
     </nav>
-
-    <!-- Hero Section -->
-    <main class="hero-section">
-        <div class="hero-logo">
-            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
-            </svg>
-        </div>
-        
-        <h1 class="hero-title">Welcome to Quiet</h1>
-        <p class="hero-subtitle">Maximum power, minimum effort — Quiet, your way to victory.</p>
-        
-        <div class="hero-buttons">
-            <button class="btn-primary" onclick="showProductsFromHero()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Products
-            </button>
-            <button class="btn-secondary" onclick="showAdvantagesFromHero()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Main Content -->
+    <div id="mainContent">
+        <!-- Hero Section -->
+        <main class="hero-section">
+            <div class="hero-logo">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
                 </svg>
-                Advantages
-            </button>
-        </div>
-    </main>
-    <!-- Stats Section -->
-    <section class="stats-section">
-        <div class="stats-container">
-            <div class="stat-card">
-                <div class="stat-number">0</div>
-                <div class="stat-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    Users
-                </div>
             </div>
             
-            <div class="stat-card">
-                <div class="stat-number">0</div>
-                <div class="stat-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <polygon points="5,3 19,12 5,21 5,3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                    Launches
-                </div>
-            </div>
+            <h1 class="hero-title">Welcome to Quiet</h1>
+            <p class="hero-subtitle">Maximum power, minimum effort — Quiet, your way to victory.</p>
             
-            <div class="stat-card">
-                <div class="stat-number">0</div>
-                <div class="stat-label">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M2 3H8C9.06087 3 10.0783 3.42143 10.8284 4.17157C11.5786 4.92172 12 5.93913 12 7V21C12 20.2044 11.6839 19.4413 11.1213 18.8787C10.5587 18.3161 9.79565 18 9 18H2V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                        <path d="M22 3H16C14.9391 3 13.9217 3.42143 13.1716 4.17157C12.4214 4.92172 12 5.93913 12 7V21C12 20.2044 12.3161 19.4413 12.8787 18.8787C13.4413 18.3161 14.2044 18 15 18H22V3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                    </svg>
-                    Online
-                </div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-number">0</div>
-                <div class="stat-label">
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="navigateToProducts()">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                         <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
-                    Updates
+                    Products
+                </button>
+                <button class="btn-secondary" onclick="navigateToAdvantages()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+                    </svg>
+                    Advantages
+                </button>
+            </div>
+        </main>
+
+        <!-- Stats Section -->
+        <section class="stats-section">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <div class="stat-number" id="usersCount">1247</div>
+                    <div class="stat-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Users
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">8965</div>
+                    <div class="stat-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polygon points="5,3 19,12 5,21 5,3" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        Launches
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">156</div>
+                    <div class="stat-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+                        </svg>
+                        Features
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-number">89</div>
+                    <div class="stat-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Updates
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- FAQ Section -->
+        <section class="faq-section">
+            <div class="faq-container">
+                <div class="faq-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <h2 class="faq-title">Frequently Asked Questions</h2>
+                <p class="faq-subtitle">Find answers to common questions about Quiet Client</p>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        What is Quiet Client?
+                        <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Quiet Client is a powerful gaming enhancement tool designed to give you the competitive edge you need. Our software provides advanced features while maintaining the highest levels of security and discretion.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Is Quiet Client safe to use?
+                        <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Yes, Quiet Client is built with security as our top priority. We use advanced protection methods and regular updates to ensure your safety and privacy while using our software.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        How much does Quiet Client cost?
+                        <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        We offer flexible pricing plans: Monthly (250₽), Yearly (450₽), and Lifetime (550₽). All plans include regular updates and customer support.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        What games does Quiet support?
+                        <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Quiet Client supports a wide range of popular games including Minecraft, Fortnite, Valorant, CS:GO, and many others. We continuously add support for new games based on community requests.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        How do I get started with Quiet?
+                        <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Getting started is easy! Simply register for an account, choose your preferred plan, download the client, and follow our setup guide. Our support team is available 24/7 to help you with any questions.
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        Do you offer customer support?
+                        <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <div class="faq-answer">
+                        Yes! We provide 24/7 customer support through Discord, email, and live chat. Our experienced team is always ready to help you with technical issues, setup questions, or any other concerns.
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Pricing Section -->
+        <section class="pricing-section">
+            <div class="pricing-container">
+                <div class="faq-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <h2 class="pricing-title">Choose Your Plan</h2>
+                <p class="pricing-subtitle">Select the perfect plan for your gaming needs</p>
+                
+                <div class="pricing-cards">
+                    <div class="pricing-card">
+                        <div class="pricing-plan">Месяц</div>
+                        <div class="pricing-price">250</div>
+                        <div class="pricing-currency">рублей</div>
+                        <ul class="pricing-features">
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Все базовые функции
+                            </li>
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Поддержка 24/7
+                            </li>
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Регулярные обновления
+                            </li>
+                        </ul>
+                        <button class="pricing-btn" onclick="selectPlan('month')">Выбрать план</button>
+                    </div>
+
+                    <div class="pricing-card popular">
+                        <div class="pricing-plan">Год</div>
+                        <div class="pricing-price">450</div>
+                        <div class="pricing-currency">рублей</div>
+                        <ul class="pricing-features">
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Все функции месячного
+                            </li>
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Приоритетная поддержка
+                            </li>
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Эксклюзивные функции
+                            </li>
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Скидка 85%
+                            </li>
+                        </ul>
+                        <button class="pricing-btn" onclick="selectPlan('year')">Выбрать план</button>
+                    </div>
+
+                    <div class="pricing-card">
+                        <div class="pricing-plan">ЛайфТайм</div>
+                        <div class="pricing-price">550</div>
+                        <div class="pricing-currency">рублей</div>
+                        <ul class="pricing-features">
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Навсегда ваш
+                            </li>
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Все будущие обновления
+                            </li>
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                VIP поддержка
+                            </li>
+                            <li class="pricing-feature">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
+                                </svg>
+                                Эксклюзивный доступ
+                            </li>
+                        </ul>
+                        <button class="pricing-btn" onclick="selectPlan('lifetime')">Выбрать план</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <div class="footer-protection">Protected by NeverAntiLeak</div>
+                <div class="footer-contact">
+                    Связаться с нами<br>
+                    <a href="https://t.me/NeverGuardDevBlogs" class="footer-link" target="_blank">Telegram</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <!-- Admin Panel -->
+    <div class="admin-panel" id="adminPanel">
+        <div class="admin-container">
+            <h2 class="admin-title">Админ Панель</h2>
+            <div class="users-table">
+                <div class="table-header">
+                    <div>Пользователь</div>
+                    <div>Email</div>
+                    <div>Дата регистрации</div>
+                    <div>Статус</div>
+                    <div>Действия</div>
+                </div>
+                <div id="usersTableBody">
+                    <!-- Users will be loaded here -->
                 </div>
             </div>
         </div>
-    </section>
-    <!-- FAQ Section -->
-    <section class="faq-section">
-        <div class="faq-container">
-            <div class="faq-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
-                    <path d="M9.09 9C9.3251 8.33167 9.78915 7.76811 10.4 7.40913C11.0108 7.05016 11.7289 6.91894 12.4272 7.03871C13.1255 7.15849 13.7588 7.52152 14.2151 8.06353C14.6713 8.60553 14.9211 9.29152 14.92 10C14.92 12 11.92 13 11.92 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    <path d="M12 17H12.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </div>
-            <h2 class="faq-title">Frequently Asked Questions</h2>
-            <p class="faq-subtitle" style="margin-bottom: 40px;">Everything you need to know about Quiet Client</p>
-            
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    What is Quiet Client?
-                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    Quiet Client is an advanced gaming client designed to provide maximum performance and minimum effort. It offers premium features, enhanced gameplay mechanics, and a superior user experience for competitive gaming.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    Is Quiet Client safe to use?
-                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    Yes, Quiet Client is completely safe. We use advanced security measures and regular updates to ensure your account and data remain protected. Our client is trusted by thousands of users worldwide.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    How much does Quiet Client cost?
-                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    We offer flexible pricing plans starting from €9.99/month for basic features, €19.99/month for Pro version, and €39.99/month for Enterprise. All plans include regular updates and customer support.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    What games does Quiet support?
-                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    Quiet Client supports a wide range of popular games including Minecraft, Fortnite, Valorant, CS:GO, and many others. We continuously add support for new games based on community requests.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    How do I get started with Quiet?
-                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    Getting started is easy! Simply register for an account, choose your preferred plan, download the client, and follow our setup guide. Our support team is available 24/7 to help you with any questions.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" onclick="toggleFaq(this)">
-                    Do you offer customer support?
-                    <svg class="faq-icon-toggle" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <polyline points="6,9 12,15 18,9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div class="faq-answer">
-                    Yes! We provide 24/7 customer support through Discord, email, and live chat. Our experienced team is always ready to help you with technical issues, setup questions, or any other concerns.
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing-section">
-        <div class="pricing-container">
-            <div class="faq-icon">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L15.09 8.26L22 9L17 14L18.18 21L12 17.77L5.82 21L7 14L2 9L8.91 8.26L12 2Z" fill="currentColor"/>
-                </svg>
-            </div>
-            <h2 class="pricing-title">Choose Your Plan</h2>
-            <p class="pricing-subtitle">Select the perfect plan for your gaming needs</p>
-            
-            <div class="pricing-cards">
-                <div class="pricing-card">
-                    <div class="pricing-plan">Месяц</div>
-                    <div class="pricing-price">250</div>
-                    <div class="pricing-currency">рублей</div>
-                    <ul class="pricing-features">
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Все базовые функции
-                        </li>
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Поддержка 24/7
-                        </li>
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Регулярные обновления
-                        </li>
-                    </ul>
-                    <button class="pricing-btn" onclick="selectPlan('month')">Выбрать план</button>
-                </div>
-
-                <div class="pricing-card popular">
-                    <div class="pricing-plan">Год</div>
-                    <div class="pricing-price">450</div>
-                    <div class="pricing-currency">рублей</div>
-                    <ul class="pricing-features">
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Все функции месячного
-                        </li>
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Приоритетная поддержка
-                        </li>
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Эксклюзивные функции
-                        </li>
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Скидка 85%
-                        </li>
-                    </ul>
-                    <button class="pricing-btn" onclick="selectPlan('year')">Выбрать план</button>
-                </div>
-
-                <div class="pricing-card">
-                    <div class="pricing-plan">ЛайфТайм</div>
-                    <div class="pricing-price">550</div>
-                    <div class="pricing-currency">рублей</div>
-                    <ul class="pricing-features">
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Навсегда ваш
-                        </li>
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Все будущие обновления
-                        </li>
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            VIP поддержка
-                        </li>
-                        <li class="pricing-feature">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <polyline points="20,6 9,17 4,12" stroke="currentColor" stroke-width="2" fill="none"/>
-                            </svg>
-                            Эксклюзивный доступ
-                        </li>
-                    </ul>
-                    <button class="pricing-btn" onclick="selectPlan('lifetime')">Выбрать план</button>
-                </div>
-            </div>
-        </div>
-    </section>
+    </div>
 
     <!-- Login Modal -->
     <div class="modal" id="loginModal">
@@ -1122,7 +1247,7 @@
             
             <form onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <input type="text" class="form-input" placeholder="Username" required>
+                    <input type="text" class="form-input" placeholder="Email or Username" required>
                 </div>
                 
                 <div class="form-group">
@@ -1137,6 +1262,7 @@
             </div>
         </div>
     </div>
+
     <!-- Register Modal -->
     <div class="modal" id="registerModal">
         <div class="modal-content">
@@ -1146,6 +1272,10 @@
             <form onsubmit="handleRegister(event)">
                 <div class="form-group">
                     <input type="text" class="form-input" placeholder="Username" required>
+                </div>
+                
+                <div class="form-group">
+                    <input type="email" class="form-input" placeholder="Email" required>
                 </div>
                 
                 <div class="form-group">
@@ -1164,18 +1294,152 @@
             </div>
         </div>
     </div>
-
     <script>
+        console.log('JavaScript loaded successfully!');
+
+        // АДМИН ПАНЕЛЬ ФУНКЦИИ - СРАЗУ В НАЧАЛЕ
+        function toggleAdminPanel() {
+            const adminPanel = document.getElementById('adminPanel');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (adminPanel.classList.contains('show')) {
+                mainContent.style.display = 'block';
+                adminPanel.classList.remove('show');
+                console.log('Admin panel hidden');
+            } else {
+                mainContent.style.display = 'none';
+                adminPanel.classList.add('show');
+                loadUsers();
+                console.log('Admin panel shown');
+            }
+        }
+
+        function loadUsers() {
+            const tableBody = document.getElementById('usersTableBody');
+            if (!tableBody) return;
+            
+            tableBody.innerHTML = '';
+            
+            let users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+            const regularUsers = users.filter(u => u.role !== 'admin');
+            
+            if (regularUsers.length === 0) {
+                const emptyRow = document.createElement('div');
+                emptyRow.style.cssText = 'padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.6);';
+                emptyRow.textContent = 'No users registered yet. Users will appear here after registration.';
+                tableBody.appendChild(emptyRow);
+                return;
+            }
+            
+            regularUsers.forEach(user => {
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <div>${user.username}</div>
+                    <div>${user.email}</div>
+                    <div>${new Date(user.registrationDate).toLocaleDateString()}</div>
+                    <div class="${user.subscription === 'active' ? 'status-active' : 'status-inactive'}">
+                        ${user.subscription === 'active' ? 'Active' : 'Inactive'}
+                    </div>
+                    <div>
+                        <button class="btn-small" onclick="toggleUserSubscription(${user.id})" 
+                                style="background: ${user.subscription === 'active' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)'}; 
+                                       border-color: ${user.subscription === 'active' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(16, 185, 129, 0.4)'};">
+                            ${user.subscription === 'active' ? 'Deactivate' : 'Activate'}
+                        </button>
+                    </div>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            console.log(`Loaded ${regularUsers.length} users in admin panel`);
+        }
+
+        function toggleUserSubscription(userId) {
+            let users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                user.subscription = user.subscription === 'active' ? 'inactive' : 'active';
+                localStorage.setItem('quietUsers', JSON.stringify(users));
+                loadUsers();
+                updateUserCount();
+                console.log(`User ${user.username} subscription toggled to ${user.subscription}`);
+                
+                // Show notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(16, 185, 129, 0.9);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    z-index: 3000;
+                    backdrop-filter: blur(10px);
+                `;
+                notification.textContent = `${user.username} subscription ${user.subscription}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        }
+
+        // Database simulation using localStorage
+        let users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+        let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+
+        // Initialize admin user if doesn't exist
+        function initializeAdmin() {
+            // Принудительно создаем/обновляем админа popa123
+            let adminExists = false;
+            
+            // Проверяем есть ли уже popa123
+            for (let i = 0; i < users.length; i++) {
+                if (users[i].username === 'popa123') {
+                    users[i].role = 'admin'; // Принудительно делаем админом
+                    users[i].email = 'popa123@quiet.com';
+                    users[i].password = '123123';
+                    users[i].subscription = 'active';
+                    adminExists = true;
+                    console.log('Updated existing popa123 to admin');
+                    break;
+                }
+            }
+            
+            // Если нет popa123, создаем
+            if (!adminExists) {
+                const adminUser = {
+                    id: 1,
+                    username: 'popa123',
+                    email: 'popa123@quiet.com',
+                    password: '123123',
+                    registrationDate: new Date().toISOString(),
+                    subscription: 'active',
+                    role: 'admin'
+                };
+                users.push(adminUser);
+                console.log('Created new admin user popa123');
+            }
+            
+            localStorage.setItem('quietUsers', JSON.stringify(users));
+        }
+
         // Modal functions
         function openLoginModal() {
+            console.log('Opening login modal');
             document.getElementById('loginModal').classList.add('show');
         }
 
         function openRegisterModal() {
+            console.log('Opening register modal');
             document.getElementById('registerModal').classList.add('show');
         }
 
         function closeModal(modalId) {
+            console.log('Closing modal:', modalId);
             document.getElementById(modalId).classList.remove('show');
         }
 
@@ -1188,170 +1452,146 @@
             closeModal('registerModal');
             openLoginModal();
         }
-        function handleLogin(event) {
-            event.preventDefault();
-            const username = event.target.querySelector('input[type="text"]').value;
-            const password = event.target.querySelector('input[type="password"]').value;
-            
-            console.log('Login attempt:', { username, password });
-            
-            // Check if user is registered
-            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
-            
-            if (registeredUsers[username] && registeredUsers[username] === password) {
-                // Successful login
-                loginUser(username);
-                closeModal('loginModal');
-            } else {
-                // Failed login
-                showLoginError('Invalid username or password!');
-            }
-        }
 
-        function handleRegister(event) {
+        // Registration handler
+        async function handleRegister(event) {
             event.preventDefault();
+            console.log('Handling registration');
             const inputs = event.target.querySelectorAll('input');
             const username = inputs[0].value;
-            const password = inputs[1].value;
-            const confirmPassword = inputs[2].value;
-            
+            const email = inputs[1].value;
+            const password = inputs[2].value;
+            const confirmPassword = inputs[3].value;
+
             if (password !== confirmPassword) {
-                showRegisterError('Passwords do not match!');
+                showError('registerModal', 'Passwords do not match!');
                 return;
             }
-            
+
             if (username.length < 3) {
-                showRegisterError('Username must be at least 3 characters!');
+                showError('registerModal', 'Username must be at least 3 characters!');
                 return;
             }
-            
+
             if (password.length < 6) {
-                showRegisterError('Password must be at least 6 characters!');
+                showError('registerModal', 'Password must be at least 6 characters!');
                 return;
             }
-            
-            console.log('Register attempt:', { username, password });
-            
+
             // Check if user already exists
-            const registeredUsers = JSON.parse(localStorage.getItem('registeredUsers') || '{}');
-            
-            if (registeredUsers[username]) {
-                showRegisterError('Username already exists!');
+            const existingUser = users.find(user => user.email === email || user.username === username);
+            if (existingUser) {
+                showError('registerModal', 'User with this email or username already exists!');
                 return;
             }
+
+            // Create new user
+            const newUser = {
+                id: Date.now(),
+                username: username,
+                email: email,
+                password: password,
+                registrationDate: new Date().toISOString(),
+                subscription: 'inactive',
+                role: 'user'
+            };
+
+            users.push(newUser);
+            localStorage.setItem('quietUsers', JSON.stringify(users));
+            updateUserCount();
+
+            showSuccess('registerModal', 'Registration successful! Please log in.');
             
-            // Save user to registered users
-            registeredUsers[username] = password;
-            localStorage.setItem('registeredUsers', JSON.stringify(registeredUsers));
-            
-            // Simply redirect to login
-            closeModal('registerModal');
             setTimeout(() => {
+                closeModal('registerModal');
                 openLoginModal();
-            }, 300);
+            }, 2000);
         }
+        // Login handler
+        async function handleLogin(event) {
+            event.preventDefault();
+            console.log('Handling login');
+            const inputs = event.target.querySelectorAll('input');
+            const emailOrUsername = inputs[0].value;
+            const password = inputs[1].value;
 
-        // Remove the showRegistrationSuccess and redirectToLogin functions
-        // Function to show login error
-        function showLoginError(message) {
-            const existingError = document.querySelector('.login-error');
-            if (existingError) existingError.remove();
+            console.log('Login attempt with:', emailOrUsername, password);
+
+            let user = users.find(u => 
+                (u.email === emailOrUsername || u.username === emailOrUsername) && 
+                u.password === password
+            );
             
-            const loginModal = document.querySelector('#loginModal');
-            const form = loginModal.querySelector('form');
-            
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'login-error';
-            errorDiv.style.cssText = `
-                background: rgba(239, 68, 68, 0.2);
-                border: 1px solid rgba(239, 68, 68, 0.4);
-                border-radius: 8px;
-                padding: 12px;
-                margin-bottom: 16px;
-                color: #ffffff;
-                font-size: 14px;
-                text-align: center;
-                backdrop-filter: blur(20px);
-            `;
-            errorDiv.textContent = message;
-            
-            form.insertBefore(errorDiv, form.firstChild);
-            
-            // Remove error after 5 seconds
-            setTimeout(() => {
-                if (errorDiv.parentNode) {
-                    errorDiv.remove();
+            // ПРИНУДИТЕЛЬНО: если это popa123, делаем админом
+            if (user && user.username === 'popa123') {
+                user.role = 'admin';
+                user.subscription = 'active';
+                // Обновляем в массиве users
+                const userIndex = users.findIndex(u => u.username === 'popa123');
+                if (userIndex !== -1) {
+                    users[userIndex] = user;
+                    localStorage.setItem('quietUsers', JSON.stringify(users));
                 }
-            }, 5000);
-        }
-
-        // Function to show register error
-        function showRegisterError(message) {
-            const existingError = document.querySelector('.register-error');
-            if (existingError) existingError.remove();
+                console.log('FORCED popa123 to be admin');
+            }
             
-            const registerModal = document.querySelector('#registerModal');
-            const form = registerModal.querySelector('form');
-            
-            const errorDiv = document.createElement('div');
-            errorDiv.className = 'register-error';
-            errorDiv.style.cssText = `
-                background: rgba(239, 68, 68, 0.2);
-                border: 1px solid rgba(239, 68, 68, 0.4);
-                border-radius: 8px;
-                padding: 12px;
-                margin-bottom: 16px;
-                color: #ffffff;
-                font-size: 14px;
-                text-align: center;
-                backdrop-filter: blur(20px);
-            `;
-            errorDiv.textContent = message;
-            
-            form.insertBefore(errorDiv, form.firstChild);
-            
-            // Remove error after 5 seconds
-            setTimeout(() => {
-                if (errorDiv.parentNode) {
-                    errorDiv.remove();
+            if (user) {
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                console.log('Login successful for:', user.username, 'Role:', user.role);
+                
+                updateNavigation();
+                closeModal('loginModal');
+                
+                if (user.role === 'admin') {
+                    console.log('Admin detected, auto-showing admin panel');
+                    setTimeout(() => {
+                        showAdminPanel();
+                    }, 500);
                 }
-            }, 5000);
+            } else {
+                console.log('Login failed for:', emailOrUsername);
+                showError('loginModal', 'Invalid email or password!');
+            }
         }
 
-        // Function to handle user login state
-        function loginUser(username) {
-            // Store user data
-            localStorage.setItem('isLoggedIn', 'true');
-            localStorage.setItem('username', username);
-            localStorage.setItem('loginDate', new Date().toLocaleDateString());
-            
-            // Update navigation
-            updateNavigation();
-        }
-
-        // Function to update navigation after login
+        // Update navigation after login
         function updateNavigation() {
-            const navRight = document.querySelector('.nav-right');
-            const username = localStorage.getItem('username') || 'User';
+            const navRight = document.getElementById('navRight');
             
-            navRight.innerHTML = `
-                <button class="btn-account" onclick="showAccountModal();">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                    Account
-                </button>
-            `;
-            navRight.classList.add('logged-in');
+            if (currentUser) {
+                console.log('Updating navigation for user:', currentUser.username, 'Role:', currentUser.role);
+                
+                let adminButton = '';
+                if (currentUser.role === 'admin') {
+                    adminButton = '<button class="btn-admin" onclick="toggleAdminPanel()" style="margin-right: 8px;">Admin Panel</button>';
+                    console.log('Admin button added to navigation');
+                }
+                
+                navRight.innerHTML = `
+                    <span style="color: #9ca3af; margin-right: 16px;">Hello, ${currentUser.username}!</span>
+                    ${adminButton}
+                    <button class="btn-account" onclick="showAccountModal()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 21V19C20 17.9391 19.5786 16.9217 18.8284 16.1716C18.0783 15.4214 17.0609 15 16 15H8C6.93913 15 5.92172 15.4214 5.17157 16.1716C4.42143 16.9217 4 17.9391 4 19V21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Account
+                    </button>
+                    <button class="btn-login" onclick="logout()">Logout</button>
+                `;
+            } else {
+                navRight.innerHTML = `
+                    <span class="btn-register" onclick="openRegisterModal();">Register</span>
+                    <button class="btn-login" onclick="openLoginModal();">Login</button>
+                `;
+            }
         }
 
-        // Function to show account modal
+        // Show account modal
         function showAccountModal() {
-            const username = localStorage.getItem('username') || 'User';
-            const loginDate = localStorage.getItem('loginDate') || 'Unknown';
-            
-            // Set UID as numbers and HWID as empty
+            const username = currentUser.username;
+            const loginDate = new Date(currentUser.registrationDate).toLocaleDateString();
             const uid = '228';
             const hwid = '';
             
@@ -1380,7 +1620,7 @@
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                                 <span style="color: rgba(255, 255, 255, 0.8);">Plan:</span>
-                                <span style="color: #f59e0b; font-weight: 600;">Premium Subscription</span>
+                                <span style="color: #f59e0b; font-weight: 600;">${currentUser.subscription === 'active' ? 'Premium Subscription' : 'Free Trial'}</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                                 <span style="color: rgba(255, 255, 255, 0.8);">Member since:</span>
@@ -1388,37 +1628,24 @@
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
                                 <span style="color: rgba(255, 255, 255, 0.8);">UID:</span>
-                                <span style="color: #8b5cf6; font-weight: 600; font-family: monospace;">${uid}</span>
+                                <span style="color: #ffffff; font-weight: 600;">${uid}</span>
                             </div>
                             <div style="display: flex; justify-content: space-between; align-items: center;">
                                 <span style="color: rgba(255, 255, 255, 0.8);">HWID:</span>
-                                <span style="color: #6b7280; font-weight: 600; font-family: monospace; font-size: 12px;">${hwid || 'Not set'}</span>
+                                <span style="color: rgba(255, 255, 255, 0.6); font-style: italic;">${hwid || 'Not set'}</span>
                             </div>
                         </div>
                         
-                        <button class="btn-modal" onclick="downloadLauncher()" style="margin-bottom: 12px;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-right: 8px;">
-                                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
+                        <button onclick="showDownloadModal()" style="width: 100%; background: rgba(255, 255, 255, 0.1); color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.2); padding: 16px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; backdrop-filter: blur(30px); margin-bottom: 16px;">
                             Download Launcher
-                        </button>
-                        
-                        <button class="btn-modal" onclick="logout()" style="background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.4); color: #ffffff;">
-                            Logout
                         </button>
                     </div>
                 </div>
             `;
             document.body.appendChild(accountModal);
         }
-
-        // Function to download launcher
-        function downloadLauncher() {
-            console.log('Downloading launcher...');
-            
-            // Create download notification
+        // Show download modal
+        function showDownloadModal() {
             const downloadModal = document.createElement('div');
             downloadModal.className = 'modal show';
             downloadModal.innerHTML = `
@@ -1426,134 +1653,142 @@
                     <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
                     <h2 class="modal-title">Download Started</h2>
                     <div style="text-align: center; padding: 20px;">
-                        <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 30px; backdrop-filter: blur(20px); margin-bottom: 20px;">
-                            <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="color: #10b981; margin-bottom: 16px;">
+                        <div style="width: 80px; height: 80px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <polyline points="7,10 12,15 17,10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                                 <line x1="12" y1="15" x2="12" y2="3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                             </svg>
-                            <h3 style="color: #ffffff; margin-bottom: 16px;">Quiet Launcher</h3>
-                            <p style="color: rgba(255, 255, 255, 0.8);">Your download has started successfully!</p>
-                            <p style="color: rgba(255, 255, 255, 0.6); font-size: 14px; margin-top: 12px;">File: QuietLauncher.exe (2.4 MB)</p>
                         </div>
+                        <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 20px;">Your download has started successfully!</p>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">File: quiet-launcher.exe</p>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">Size: 15.2 MB</p>
                     </div>
                 </div>
             `;
             document.body.appendChild(downloadModal);
-            
-            // Auto close after 3 seconds
-            setTimeout(() => {
-                downloadModal.remove();
-            }, 3000);
         }
 
-        // Function to logout
+        // Logout function
         function logout() {
-            localStorage.removeItem('isLoggedIn');
-            localStorage.removeItem('username');
-            localStorage.removeItem('loginDate');
-            
-            // Restore original navigation
-            const navRight = document.querySelector('.nav-right');
-            navRight.innerHTML = `
-                <span class="btn-register" onclick="openRegisterModal();">Register</span>
-                <button class="btn-login" onclick="openLoginModal();">Login</button>
-            `;
-            navRight.classList.remove('logged-in');
-            
-            // Close modal
-            document.querySelectorAll('.modal').forEach(modal => modal.remove());
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateNavigation();
+            hideAdminPanel();
+            console.log('User logged out');
         }
 
-        // Check if user is already logged in on page load
-        function checkLoginStatus() {
-            if (localStorage.getItem('isLoggedIn') === 'true') {
-                updateNavigation();
+        // Admin panel functions
+        function showAdminPanel() {
+            document.getElementById('mainContent').style.display = 'none';
+            document.getElementById('adminPanel').classList.add('show');
+            loadUsers();
+        }
+
+        function hideAdminPanel() {
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('adminPanel').classList.remove('show');
+        }
+
+        function toggleAdminPanel() {
+            const adminPanel = document.getElementById('adminPanel');
+            const mainContent = document.getElementById('mainContent');
+            
+            if (adminPanel.classList.contains('show')) {
+                hideAdminPanel();
+            } else {
+                showAdminPanel();
             }
         }
 
-        // Close modal when clicking outside
-        window.onclick = function(event) {
-            const loginModal = document.getElementById('loginModal');
-            const registerModal = document.getElementById('registerModal');
+        function loadUsers() {
+            const tableBody = document.getElementById('usersTableBody');
+            tableBody.innerHTML = '';
             
-            if (event.target === loginModal) {
-                closeModal('loginModal');
-            }
-            if (event.target === registerModal) {
-                closeModal('registerModal');
-            }
-        }
-
-        // Counter animation
-        function animateCounters() {
-            const counters = document.querySelectorAll('.stat-number');
-            const targets = [1247, 8965, 156, 89];
+            const regularUsers = users.filter(u => u.role !== 'admin');
             
-            counters.forEach((counter, index) => {
-                const target = targets[index];
-                const increment = target / 100;
-                let current = 0;
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        counter.textContent = target.toLocaleString();
-                        clearInterval(timer);
-                    } else {
-                        counter.textContent = Math.floor(current).toLocaleString();
-                    }
-                }, 20);
-            });
-        }
-
-        // Plan selection function
-        function selectPlan(planType) {
-            let planName = '';
-            let price = '';
-            
-            switch(planType) {
-                case 'month':
-                    planName = 'Месячный план';
-                    price = '250 рублей';
-                    break;
-                case 'year':
-                    planName = 'Годовой план';
-                    price = '450 рублей';
-                    break;
-                case 'lifetime':
-                    planName = 'ЛайфТайм';
-                    price = '550 рублей';
-                    break;
+            if (regularUsers.length === 0) {
+                const emptyRow = document.createElement('div');
+                emptyRow.style.cssText = 'padding: 40px; text-align: center; color: rgba(255, 255, 255, 0.6);';
+                emptyRow.textContent = 'No users registered yet. Users will appear here after registration.';
+                tableBody.appendChild(emptyRow);
+                return;
             }
             
-            console.log(`Selected plan: ${planName} - ${price}`);
-            
-            // Create purchase modal
-            const purchaseModal = document.createElement('div');
-            purchaseModal.className = 'modal show';
-            purchaseModal.innerHTML = `
-                <div class="modal-content">
-                    <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
-                    <h2 class="modal-title">Подтверждение покупки</h2>
-                    <div style="text-align: center; padding: 20px;">
-                        <div style="background: rgba(255, 255, 255, 0.1); border-radius: 12px; padding: 30px; backdrop-filter: blur(20px); margin-bottom: 20px;">
-                            <h3 style="color: #ffffff; margin-bottom: 16px;">${planName}</h3>
-                            <div style="font-size: 32px; font-weight: 700; color: #6366f1; margin-bottom: 16px;">${price}</div>
-                            <p style="color: rgba(255, 255, 255, 0.8);">Вы выбрали отличный план!</p>
-                        </div>
-                        <button class="btn-modal" onclick="processPurchase('${planType}')">Перейти к оплате</button>
+            regularUsers.forEach(user => {
+                const row = document.createElement('div');
+                row.className = 'table-row';
+                row.innerHTML = `
+                    <div>${user.username}</div>
+                    <div>${user.email}</div>
+                    <div>${new Date(user.registrationDate).toLocaleDateString()}</div>
+                    <div class="${user.subscription === 'active' ? 'status-active' : 'status-inactive'}">
+                        ${user.subscription === 'active' ? 'Active' : 'Inactive'}
                     </div>
-                </div>
-            `;
-            document.body.appendChild(purchaseModal);
+                    <div>
+                        <button class="btn-small" onclick="toggleUserSubscription(${user.id})" 
+                                style="background: ${user.subscription === 'active' ? 'rgba(239, 68, 68, 0.2)' : 'rgba(16, 185, 129, 0.2)'}; 
+                                       border-color: ${user.subscription === 'active' ? 'rgba(239, 68, 68, 0.4)' : 'rgba(16, 185, 129, 0.4)'};">
+                            ${user.subscription === 'active' ? 'Deactivate' : 'Activate'}
+                        </button>
+                    </div>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            console.log(`Loaded ${regularUsers.length} users in admin panel`);
         }
-        
-        // Process purchase function
-        function processPurchase(planType) {
-            console.log(`Processing purchase for: ${planType}`);
-            // Here you would integrate with payment system
-            alert('Функция оплаты будет добавлена позже!');
+
+        function toggleUserSubscription(userId) {
+            const user = users.find(u => u.id === userId);
+            if (user) {
+                user.subscription = user.subscription === 'active' ? 'inactive' : 'active';
+                localStorage.setItem('quietUsers', JSON.stringify(users));
+                loadUsers();
+                updateUserCount();
+                console.log(`User ${user.username} subscription toggled to ${user.subscription}`);
+                
+                // Show notification
+                const notification = document.createElement('div');
+                notification.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: rgba(16, 185, 129, 0.9);
+                    color: white;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    z-index: 3000;
+                    backdrop-filter: blur(10px);
+                `;
+                notification.textContent = `${user.username} subscription ${user.subscription}`;
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+        }
+        // Navigation functions
+        function navigateToHome() {
+            document.querySelector('.hero-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function navigateToAdvantages() {
+            document.querySelector('.stats-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function navigateToVideo() {
+            // Placeholder for video section
+            navigateToAdvantages();
+        }
+
+        function navigateToFaq() {
+            document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function navigateToProducts() {
+            document.querySelector('.pricing-section').scrollIntoView({ behavior: 'smooth' });
         }
 
         // FAQ toggle function
@@ -1561,120 +1796,125 @@
             const answer = element.nextElementSibling;
             const icon = element.querySelector('.faq-icon-toggle');
             
-            // Close all other FAQ items
-            document.querySelectorAll('.faq-answer').forEach(item => {
-                if (item !== answer) {
+            if (answer.classList.contains('show')) {
+                answer.classList.remove('show');
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                // Close all other FAQ items
+                document.querySelectorAll('.faq-answer.show').forEach(item => {
                     item.classList.remove('show');
-                }
-            });
+                });
+                document.querySelectorAll('.faq-icon-toggle').forEach(item => {
+                    item.style.transform = 'rotate(0deg)';
+                });
+                
+                // Open clicked FAQ item
+                answer.classList.add('show');
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        // Pricing functions
+        function selectPlan(plan) {
+            console.log('Selected plan:', plan);
+            // Here you would typically integrate with a payment processor
+            const planNames = {
+                'month': 'Месяц (250₽)',
+                'year': 'Год (450₽)',
+                'lifetime': 'ЛайфТайм (550₽)'
+            };
             
-            document.querySelectorAll('.faq-icon-toggle').forEach(item => {
-                if (item !== icon) {
-                    item.classList.remove('rotated');
-                }
-            });
-            
-            // Toggle current FAQ item
-            answer.classList.toggle('show');
-            icon.classList.toggle('rotated');
-        }
-
-        // Navigation functions
-        function navigateToHome() {
-            console.log('Navigating to Home');
-            // Scroll to top
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-
-        function navigateToAdvantages() {
-            console.log('Navigating to Advantages');
-            // Scroll to stats section
-            document.querySelector('.stats-section').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function navigateToVideo() {
-            console.log('Navigating to Video');
-            // Create and show video modal or redirect
-            showVideoModal();
-        }
-
-        function navigateToFaq() {
-            console.log('Navigating to FAQ');
-            // Scroll to FAQ section
-            document.querySelector('.faq-section').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function navigateToProducts() {
-            console.log('Navigating to Products');
-            // Scroll to pricing section
-            document.querySelector('.pricing-section').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        // Video modal function
-        function showVideoModal() {
-            const videoModal = document.createElement('div');
-            videoModal.className = 'modal show';
-            videoModal.innerHTML = `
-                <div class="modal-content" style="max-width: 800px; width: 95%;">
-                    <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
-                    <h2 class="modal-title">Quiet Demo Video</h2>
-                    <div style="text-align: center; padding: 20px;">
-                        <div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px; background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(20px);">
-                            <iframe 
-                                src="https://www.youtube.com/embed/e8mKA5Lryg8" 
-                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px;"
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                        <p style="color: rgba(255, 255, 255, 0.8); margin-top: 20px; font-size: 14px;">
-                            Watch how Quiet Client transforms your gaming experience
-                        </p>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(videoModal);
-        }
-
-        // Products modal function
-        function showProductsModal() {
-            const productsModal = document.createElement('div');
-            productsModal.className = 'modal show';
-            productsModal.innerHTML = `
+            const modal = document.createElement('div');
+            modal.className = 'modal show';
+            modal.innerHTML = `
                 <div class="modal-content">
                     <button class="modal-close" onclick="this.parentElement.parentElement.remove()">&times;</button>
-                    <h2 class="modal-title">Our Products</h2>
-                    <div style="padding: 20px;">
-                        <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; margin-bottom: 16px; backdrop-filter: blur(20px);">
-                            <h3 style="color: #ffffff; margin-bottom: 8px;">Quiet Client</h3>
-                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Advanced gaming client with premium features</p>
-                        </div>
-                        <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; margin-bottom: 16px; backdrop-filter: blur(20px);">
-                            <h3 style="color: #ffffff; margin-bottom: 8px;">Quiet Pro</h3>
-                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Professional version with extended capabilities</p>
-                        </div>
-                        <div style="background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 20px; backdrop-filter: blur(20px);">
-                            <h3 style="color: #ffffff; margin-bottom: 8px;">Quiet Enterprise</h3>
-                            <p style="color: rgba(255, 255, 255, 0.8); font-size: 14px;">Enterprise solution for teams and organizations</p>
-                        </div>
+                    <h2 class="modal-title">Plan Selected</h2>
+                    <div style="text-align: center; padding: 20px;">
+                        <p style="color: rgba(255, 255, 255, 0.9); margin-bottom: 20px;">You selected: ${planNames[plan]}</p>
+                        <p style="color: rgba(255, 255, 255, 0.7); font-size: 14px;">Please contact our support team to complete the purchase.</p>
                     </div>
                 </div>
             `;
-            document.body.appendChild(productsModal);
+            document.body.appendChild(modal);
         }
 
-        // Hero buttons functions
-        function showProductsFromHero() {
-            navigateToProducts();
+        // Utility functions
+        function showError(modalId, message) {
+            const modal = document.getElementById(modalId);
+            let errorDiv = modal.querySelector('.error-message');
+            
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.className = 'error-message';
+                modal.querySelector('.modal-content').insertBefore(errorDiv, modal.querySelector('form'));
+            }
+            
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
         }
 
-        function showAdvantagesFromHero() {
-            navigateToAdvantages();
+        function showSuccess(modalId, message) {
+            const modal = document.getElementById(modalId);
+            let successDiv = modal.querySelector('.success-message');
+            
+            if (!successDiv) {
+                successDiv = document.createElement('div');
+                successDiv.className = 'success-message';
+                modal.querySelector('.modal-content').insertBefore(successDiv, modal.querySelector('form'));
+            }
+            
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 5000);
         }
 
-        // Initialize when page loads
+        function updateUserCount() {
+            const userCount = users.filter(u => u.role !== 'admin').length;
+            const countElement = document.getElementById('usersCount');
+            if (countElement) {
+                countElement.textContent = userCount + 1247; // Base count + real users
+            }
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.remove();
+            }
+        }
+
+        // Initialize everything when page loads
         document.addEventListener('DOMContentLoaded', function() {
-            setTimeout(animateCounters, 1000);
-            checkLoginStatus(); // Check if user is already logged in
+            console.log('DOM loaded, initializing...');
+            
+            // Load existing users
+            users = JSON.parse(localStorage.getItem('quietUsers') || '[]');
+            currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+            
+            // Initialize admin
+            initializeAdmin();
+            
+            // ПРИНУДИТЕЛЬНО: если текущий пользователь popa123, делаем админом
+            if (currentUser && currentUser.username === 'popa123') {
+                currentUser.role = 'admin';
+                currentUser.subscription = 'active';
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+                console.log('FORCED current user popa123 to be admin');
+            }
+            
+            // Update UI
+            updateNavigation();
+            updateUserCount();
+            
+            console.log('Initialization complete. Users:', users.length, 'Current user:', currentUser?.username, 'Role:', currentUser?.role);
         });
     </script>
 </body>
